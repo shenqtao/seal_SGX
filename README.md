@@ -10,4 +10,12 @@ SGX [homepage](https://software.intel.com/en-us/sgx)
 
 
 ### Seal in SGX
-perform time consuming operations, such as bootstrapping, inside an SGX enclave
+perform time consuming operations, such as bootstrapping, inside an SGX enclave.
+
+This project compiles the application (App) and the SGX library (SealEnclaveTest.signed.so). It contains 2 copies of SEAL.  
+* App  
+Source files: OutEnclaveTest/, Seal_OutEnclave/
+* SGX library  
+Source files: SealEnclaveTest/, SEAL/
+* Configuration file (including encryption parameters)
+Configure.txt
