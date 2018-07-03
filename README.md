@@ -19,3 +19,8 @@ Source files: OutEnclaveTest/, Seal_OutEnclave/
 Source files: SealEnclaveTest/, SEAL/
 * Configuration file (including encryption parameters)
 Configure.txt
+
+### Usage
+Install Intel SGX linux SDK on a recent platform supporting SGX. One may also test it in simulation mode without SGX support by changing line 5 of ``Makefile`` to ```SGX_MODE ?= HW```.  
+make  
+./App
