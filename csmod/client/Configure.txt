@@ -1,0 +1,10 @@
+Sigmoid_itor=1
+Sigmoid_y_inital=1
+learningRate=0.01
+runs=50
+maxItor=10.0;10.0;10.0
+psamples=0.1;0.1;0.1
+p_poly_modulus=1x^8192 + 1
+p_coeff_modulus=8192
+encoder_conf=64;32;2
+p_plain_modulus=1589249

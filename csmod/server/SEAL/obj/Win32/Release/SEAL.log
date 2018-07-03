@@ -1,0 +1,203 @@
+﻿  bigpoly.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  bigpolyarith.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  bigpolyarray.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  biguint.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  chooser.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+chooser.cpp(419): warning C4244: 'initializing': conversion from 'uint64_t' to 'int', possible loss of data
+chooser.cpp(430): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
+  decryptor.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  encoder.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+encoder.cpp(467): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+encoder.cpp(508): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+encoder.cpp(562): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  encryptionparams.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  encryptor.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  evaluationkeys.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+evaluationkeys.cpp(10): warning C4018: '>=': signed/unsigned mismatch
+evaluationkeys.cpp(19): warning C4018: '>=': signed/unsigned mismatch
+evaluationkeys.cpp(33): warning C4018: '<': signed/unsigned mismatch
+  evaluator.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+evaluator.cpp(1023): warning C4018: '<': signed/unsigned mismatch
+evaluator.cpp(1426): warning C4244: 'argument': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+evaluator.cpp(1484): warning C4018: '<': signed/unsigned mismatch
+  keygenerator.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+keygenerator.cpp(141): warning C4018: '<=': signed/unsigned mismatch
+keygenerator.cpp(178): warning C4018: '<': signed/unsigned mismatch
+keygenerator.cpp(215): warning C4018: '<': signed/unsigned mismatch
+keygenerator.cpp(468): warning C4018: '<': signed/unsigned mismatch
+  polycrt.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  randomgen.cpp
+  simulator.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+simulator.cpp(452): warning C4244: 'argument': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+  utilities.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+c:\users\user\desktop\seal\seal\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  clipnormal.cpp
+  common.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  computation.cpp
+c:\users\user\desktop\seal\seal\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  crt.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  Compiling...
+  locks.cpp
+  mempool.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  modulus.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  ntt.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  polyarith.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  polyarithmod.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  polycore.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  polyextras.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  polyfftmult.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  polyfftmultmod.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  polymodulus.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  uintarith.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  uintarithmod.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found
+  uintcore.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+  uintextras.cpp
+C:\Users\user\Desktop\Seal\SEAL\util/defines.h(44): warning C4163: '_umul128': not available as an intrinsic function
+  ADD_CARRY_UINT64 not defined. Using add_uint64_uint64_generic (see util/defines.h)
+  SUB_BORROW_UINT64 not defined. Using sub_uint64_uint64_generic (see util/defines.h).
+  MSB_INDEX_UINT64 not defined. Using get_msb_index_generic (see util/defines.h).
+C:\Users\user\Desktop\Seal\SEAL\util/uintarith.h(114): error C3861: '_umul128': identifier not found

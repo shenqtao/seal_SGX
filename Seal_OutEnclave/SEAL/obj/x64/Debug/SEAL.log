@@ -1,0 +1,54 @@
+﻿  uintextras.cpp
+  uintcore.cpp
+  uintarithmod.cpp
+  uintarith.cpp
+  polymodulus.cpp
+  polyfftmultmod.cpp
+  polyfftmult.cpp
+  polyextras.cpp
+  polycore.cpp
+  polyarithmod.cpp
+  polyarith.cpp
+  ntt.cpp
+  modulus.cpp
+  mempool.cpp
+c:\users\user\desktop\seal\seal\util\mempool.cpp(79): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\util\mempool.cpp(103): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\util\mempool.cpp(141): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\util\mempool.cpp(152): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  locks.cpp
+  crt.cpp
+c:\users\user\desktop\seal\seal\util\crt.cpp(50): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  computation.cpp
+  common.cpp
+  clipnormal.cpp
+  utilities.cpp
+  Generating Code...
+  Compiling...
+  simulator.cpp
+  randomgen.cpp
+  polycrt.cpp
+  keygenerator.cpp
+c:\users\user\desktop\seal\seal\keygenerator.cpp(149): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\keygenerator.cpp(150): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\keygenerator.cpp(467): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  evaluator.cpp
+  evaluationkeys.cpp
+  encryptor.cpp
+  encryptionparams.cpp
+  encoder.cpp
+c:\users\user\desktop\seal\seal\encoder.cpp(467): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\encoder.cpp(508): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\encoder.cpp(562): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  decryptor.cpp
+  chooser.cpp
+c:\users\user\desktop\seal\seal\chooser.cpp(419): warning C4244: 'initializing': conversion from 'uint64_t' to 'int', possible loss of data
+c:\users\user\desktop\seal\seal\chooser.cpp(430): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
+  biguint.cpp
+c:\users\user\desktop\seal\seal\biguint.cpp(249): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  bigpolyarray.cpp
+  bigpolyarith.cpp
+  bigpoly.cpp
+c:\users\user\desktop\seal\seal\bigpoly.cpp(465): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  SEAL.vcxproj -> C:\Users\user\Desktop\Seal\bin\x64\Debug\SEAL.lib
