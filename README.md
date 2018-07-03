@@ -17,7 +17,7 @@ This project compiles the application (App) and the SGX library (SealEnclaveTest
 Source files: OutEnclaveTest/, Seal_OutEnclave/
 * SGX library  
 Source files: SealEnclaveTest/, SEAL/
-* Configuration file (including encryption parameters)
+* Configuration file (including encryption parameters)  
 Configure.txt
 
 ### Usage
@@ -25,5 +25,5 @@ Install Intel SGX linux SDK on a recent platform supporting SGX. One may also te
 * make  
 * ./App
 
-### Ongoing work
+### Ongoing work...
 Make it work in client-server mode (see the csmod directory mode for more information)
