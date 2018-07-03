@@ -24,3 +24,6 @@ Configure.txt
 Install Intel SGX linux SDK on a recent platform supporting SGX. One may also test it in simulation mode without SGX support by changing line 5 of ``Makefile`` to ```SGX_MODE ?= HW```. Then:
 * make  
 * ./App
+
+### Ongoing work
+Make it work in client-server mode (see the csmod directory mode for more information)
