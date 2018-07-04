@@ -16,9 +16,8 @@ extern "C" {
 #endif
 
 
-void generate_key_sgx();
-void get_public_key(char* public_key_buffer, size_t len);
-void get_secret_key(char* secret_key_buffer, size_t len);
+void set_public_key(char* public_key_buffer, size_t len);
+void set_secret_key(char* secret_key_buffer, size_t len);
 void sigmod_sgx(char* buffer, size_t len, int trainingSize, int precision);
 int check_Index();
 void DecreaseNoise_SGX(char* buf, size_t len);

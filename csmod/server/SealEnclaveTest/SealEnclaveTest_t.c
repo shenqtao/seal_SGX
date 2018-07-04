@@ -17,16 +17,15 @@
 } while (0)
 
 
-
-typedef struct ms_get_public_key_t {
+typedef struct ms_set_public_key_t {
 	char* ms_public_key_buffer;
 	size_t ms_len;
-} ms_get_public_key_t;
+} ms_set_public_key_t;
 
-typedef struct ms_get_secret_key_t {
+typedef struct ms_set_secret_key_t {
 	char* ms_secret_key_buffer;
 	size_t ms_len;
-} ms_get_secret_key_t;
+} ms_set_secret_key_t;
 
 typedef struct ms_sigmod_sgx_t {
 	char* ms_buffer;
@@ -84,70 +83,58 @@ typedef struct ms_sgx_thread_set_multiple_untrusted_events_ocall_t {
 	size_t ms_total;
 } ms_sgx_thread_set_multiple_untrusted_events_ocall_t;
 
-static sgx_status_t SGX_CDECL sgx_generate_key_sgx(void* pms)
+static sgx_status_t SGX_CDECL sgx_set_public_key(void* pms)
 {
-	sgx_status_t status = SGX_SUCCESS;
-	if (pms != NULL) return SGX_ERROR_INVALID_PARAMETER;
-	generate_key_sgx();
-	return status;
-}
-
-static sgx_status_t SGX_CDECL sgx_get_public_key(void* pms)
-{
-	ms_get_public_key_t* ms = SGX_CAST(ms_get_public_key_t*, pms);
+	ms_set_public_key_t* ms = SGX_CAST(ms_set_public_key_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
 	char* _tmp_public_key_buffer = ms->ms_public_key_buffer;
 	size_t _tmp_len = ms->ms_len;
 	size_t _len_public_key_buffer = _tmp_len;
 	char* _in_public_key_buffer = NULL;
 
-	CHECK_REF_POINTER(pms, sizeof(ms_get_public_key_t));
+	CHECK_REF_POINTER(pms, sizeof(ms_set_public_key_t));
 	CHECK_UNIQUE_POINTER(_tmp_public_key_buffer, _len_public_key_buffer);
 
 	if (_tmp_public_key_buffer != NULL) {
-		if ((_in_public_key_buffer = (char*)malloc(_len_public_key_buffer)) == NULL) {
+		_in_public_key_buffer = (char*)malloc(_len_public_key_buffer);
+		if (_in_public_key_buffer == NULL) {
 			status = SGX_ERROR_OUT_OF_MEMORY;
 			goto err;
 		}
 
-		memset((void*)_in_public_key_buffer, 0, _len_public_key_buffer);
+		memcpy(_in_public_key_buffer, _tmp_public_key_buffer, _len_public_key_buffer);
 	}
-	get_public_key(_in_public_key_buffer, _tmp_len);
+	set_public_key(_in_public_key_buffer, _tmp_len);
 err:
-	if (_in_public_key_buffer) {
-		memcpy(_tmp_public_key_buffer, _in_public_key_buffer, _len_public_key_buffer);
-		free(_in_public_key_buffer);
-	}
+	if (_in_public_key_buffer) free(_in_public_key_buffer);
 
 	return status;
 }
 
-static sgx_status_t SGX_CDECL sgx_get_secret_key(void* pms)
+static sgx_status_t SGX_CDECL sgx_set_secret_key(void* pms)
 {
-	ms_get_secret_key_t* ms = SGX_CAST(ms_get_secret_key_t*, pms);
+	ms_set_secret_key_t* ms = SGX_CAST(ms_set_secret_key_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
 	char* _tmp_secret_key_buffer = ms->ms_secret_key_buffer;
 	size_t _tmp_len = ms->ms_len;
 	size_t _len_secret_key_buffer = _tmp_len;
 	char* _in_secret_key_buffer = NULL;
 
-	CHECK_REF_POINTER(pms, sizeof(ms_get_secret_key_t));
+	CHECK_REF_POINTER(pms, sizeof(ms_set_secret_key_t));
 	CHECK_UNIQUE_POINTER(_tmp_secret_key_buffer, _len_secret_key_buffer);
 
 	if (_tmp_secret_key_buffer != NULL) {
-		if ((_in_secret_key_buffer = (char*)malloc(_len_secret_key_buffer)) == NULL) {
+		_in_secret_key_buffer = (char*)malloc(_len_secret_key_buffer);
+		if (_in_secret_key_buffer == NULL) {
 			status = SGX_ERROR_OUT_OF_MEMORY;
 			goto err;
 		}
 
-		memset((void*)_in_secret_key_buffer, 0, _len_secret_key_buffer);
+		memcpy(_in_secret_key_buffer, _tmp_secret_key_buffer, _len_secret_key_buffer);
 	}
-	get_secret_key(_in_secret_key_buffer, _tmp_len);
+	set_secret_key(_in_secret_key_buffer, _tmp_len);
 err:
-	if (_in_secret_key_buffer) {
-		memcpy(_tmp_secret_key_buffer, _in_secret_key_buffer, _len_secret_key_buffer);
-		free(_in_secret_key_buffer);
-	}
+	if (_in_secret_key_buffer) free(_in_secret_key_buffer);
 
 	return status;
 }
@@ -288,13 +275,12 @@ err:
 
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[8];
+	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[7];
 } g_ecall_table = {
-	8,
+	7,
 	{
-		{(void*)(uintptr_t)sgx_generate_key_sgx, 0},
-		{(void*)(uintptr_t)sgx_get_public_key, 0},
-		{(void*)(uintptr_t)sgx_get_secret_key, 0},
+		{(void*)(uintptr_t)sgx_set_public_key, 0},
+		{(void*)(uintptr_t)sgx_set_secret_key, 0},
 		{(void*)(uintptr_t)sgx_sigmod_sgx, 0},
 		{(void*)(uintptr_t)sgx_check_Index, 0},
 		{(void*)(uintptr_t)sgx_DecreaseNoise_SGX, 0},
@@ -305,15 +291,15 @@ SGX_EXTERNC const struct {
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[5][8];
+	uint8_t entry_table[5][7];
 } g_dyn_entry_table = {
 	5,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 

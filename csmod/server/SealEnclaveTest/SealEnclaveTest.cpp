@@ -95,44 +95,14 @@ void AddInRow_SGX(char* buf, size_t len,int trainingSize,int precision)
 {
 }
 
-
-//----------------------------< operation for keys >-----------------------------------------
-void generate_key_sgx()
+void set_public_key(char* public_key_buffer, size_t len)
 {
-	
-	//generate the public_key and secret_key;
-	KeyGenerator generator(parms_sgx);
-	generator.generate();
-	BigPolyArray tmp_public_key = generator.public_key();
-	BigPoly tmp_secret_key_sgx = generator.secret_key();
-
-	// Store public_key and secret_key in enclave
-	int buffer_size = 0;
-	char* tmp_s_k_b = tmp_secret_key_sgx.save(buffer_size);
-	secret_key_sgx.load(tmp_s_k_b);
-
-	buffer_size = 0;
-	char* tmp_p_k_b = tmp_public_key.save(buffer_size);
-	public_key.load(tmp_p_k_b);
-
-	delete[] tmp_s_k_b;
-	delete[] tmp_p_k_b;
+  public_key.load(public_key_buffer);
 }
 
-void get_public_key(char* public_key_buffer,size_t len)
+void set_secret_key(char* secret_key_buffer, size_t len)
 {
-	int buffer_size = 0;
-	char* tmp_p_k_b = public_key.save(buffer_size);
-	memcpy(public_key_buffer, tmp_p_k_b, buffer_size);	
-	delete[] tmp_p_k_b;
-}
-
-void get_secret_key(char* secret_key_buffer,size_t len)
-{
-	int buffer_size = 0;
-	char* tmp_s_k_b = secret_key_sgx.save(buffer_size);
-	memcpy(secret_key_buffer, tmp_s_k_b, buffer_size);
-	delete[] tmp_s_k_b;
+  secret_key_sgx.load(secret_key_buffer);
 }
 
 
