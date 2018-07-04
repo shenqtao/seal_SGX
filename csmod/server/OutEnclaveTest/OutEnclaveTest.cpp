@@ -226,6 +226,15 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             if(head.cmd == ENC_PARAMETER)
             {
               MakeConfigure_SGX(eid, buf, head.data_len);
+            }else if(head.cmd == PUBLIC_KEY)
+            {
+              set_public_key(eid, buf, head.data_len);
+            }else if(head.cmd == PRIVATE_KEY)
+            {
+              set_secret_key(eid, buf, head.data_len);
+            }else if(head.cmd == ENCRYPT_DATA)
+            {
+              DecreaseNoise_SGX(eid, buf, head.data_len);
             }
             
             sleep(3);
@@ -235,37 +244,4 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
         }
     }
     delete [] buf;
-}
-
-/**
- * 在这里处理SGX业务
- * @param fd
- * @param buf
- */
-void handle_client_msg(int fd, struct message_head *head, char *buf) {
-
-    switch (head->cmd) {
-        case ENC_PARAMETER:
-            break;
-        case PRIVATE_KEY:
-            break;
-        case ENCRYPT_DATA:
-            break;
-        case DECRYPT_DATA:
-            break;
-        default:
-            break;
-    }
-
-    int len, i;
-    assert(buf);
-    printf("recv buf is:%s\n", buf);
-    len = strlen(buf);
-    for (i=0; i<len; i++) {
-        if (buf[i] >= 'a' && buf[i] <= 'z') {
-            buf[i] += 'A'- 'a';
-        }
-    }
-    write(fd, buf, strlen(buf));
-
 }

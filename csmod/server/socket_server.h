@@ -14,6 +14,5 @@ const int bufflen = 20000000;
 int socket_bind(const char *ip, int port);
 void accpet_client(int *clients_fd, int listen_fd);
 void recv_client_msg(int *clients_fd, fd_set *readfds);
-void handle_client_msg(int fd, struct message_head *head, char *buf);
 
 #endif
