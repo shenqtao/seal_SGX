@@ -576,14 +576,17 @@ void EncryptedLogisticRegression(
 	
     send_to_sgx(client_fd, ENCRYPT_DATA, buffer, buffer_length);
     
-    char read_buf[1024] = {0};
-    int nread = read(client_fd, read_buf, 1024);
+    char *read_buf = new char[buffer_length];
+    int nread = read(client_fd, read_buf, buffer_length);
     if (nread <= 0) {
         close(client_fd);
         break;
     } else {
         printf("recv %s.\n", read_buf);
+    //    inputToSigmoid1.load(read_buf);
     }
+    delete [] read_buf;
+   
 #ifdef DEBUG
 		PolyCRTBuilder crtbuilder(parms);
 		int slot_count = crtbuilder.get_slot_count();

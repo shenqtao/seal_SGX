@@ -248,11 +248,18 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             {
               DecreaseNoise_SGX(eid, buf, head.data_len);
             }
-
-            char *ret = "processed";
-            write(clients_fd[i], ret, strlen(ret));
-            //handle_client_msg(clients_fd[i], &head, buf);
-            printf("loop finished.\n");
+            
+            sleep(1);
+            if(head.cmd == ENCRYPT_DATA)
+            {
+              write(clients_fd[i], buf, head.data_len);
+            }else
+            {
+              char *ret = "processed";
+              write(clients_fd[i], ret, strlen(ret));
+              //handle_client_msg(clients_fd[i], &head, buf);
+            }
+              printf("loop finished.\n");
         }
     }
     delete [] buf;
