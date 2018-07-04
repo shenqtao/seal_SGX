@@ -6,3 +6,30 @@ As the first step before the communication, the server needs to get the homomorp
 ### Future work
 
 Support more HME schemes, at least supporting one GPU-based HME scheme implementation
+
+### Ongoing work
+* The encryption configrations passed into the SGX enclave cannot be recognized correctly. The keys passed into the enclave may also be incorrect.
+```
+Enclave loaded.
+listen success
+new client accpeted
+command is: 0, buffer length: 144
+sizeof(EncryptionParameters): 144, len: 144
+parms_sgx.coeff_modulus_: 18eaf00
+parms_sgx.plain_modulus_: 18eadc0
+```
+
+* Possible crashes when the data trasfered through socket communication is incorrect.
+```
+new client accpeted
+command is: 0, buffer length: 144
+loop finished.
+command is: 2, buffer length: 524365
+loop finished.
+command is: 1, buffer length: 262185
+loop finished.
+command is: 3, buffer length: 786541
+loop finished.
+command is: 47800, buffer length: -1534722048
+*** buffer overflow detected ***: ./App terminated
+```
