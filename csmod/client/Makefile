@@ -1,6 +1,6 @@
 ######## SGX SDK Settings ########
-CC ?= gcc-7
-CXX ?= g++-7
+CC ?= gcc
+CXX ?= g++
 
 ######## App Settings ########
 
