@@ -1,6 +1,6 @@
 ######## SGX SDK Settings ########
-CC ?= gcc-7
-CXX ?= g++-7
+CC ?= gcc
+CXX ?= g++
 SGX_SDK ?= /opt/intel/sgxsdk
 SGX_MODE ?= HW
 # Hardware mode v.s. sim mode if comment this line
