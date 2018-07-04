@@ -2,7 +2,6 @@
 #include "../socket_server.h"
 #include "sgx_urts.h"
 #include <stdio.h>
-// #include <tchar.h> // windows environment
 #include <string.h>
 #include "Matrix.h"
 #include <vector>
@@ -12,6 +11,7 @@
 #include <sstream>
 #include <chrono>
 #include <unordered_map>
+#include <assert.h>
 #include "TestData.h"
 #include "MakeConfigure.h"
 
@@ -30,7 +30,6 @@ using namespace std;
 
 //EncryptionParameters  parms;
 sgx_enclave_id_t      eid;
-
 
 //--------------< Struct for the project >---------------------------------------------
 static struct Configure
@@ -200,3 +199,73 @@ int main()
   return 0;
 }
 
+// message processing
+/**
+ * 通过select查询到fdset之后,循环遍历每个fd是否就绪
+ * @param clients_fd
+ * @param readfds
+ */
+void recv_client_msg(int *clients_fd, fd_set *readfds) {
+    char *buf = new char[bufflen];
+    struct message_head head;
+    for (size_t i = 0; i < IPC_MAX_CONN; ++i) {
+        if (clients_fd[i] == -1) {
+            continue;
+        } else if (FD_ISSET(clients_fd[i], readfds)) {
+//            int n = read(clients_fd[i], buf, 1024);
+            int n = read(clients_fd[i], &head, sizeof(struct message_head));
+            if (n <= 0) {
+                FD_CLR(clients_fd[i], readfds);
+                printf("one socket close\n");
+                close(clients_fd[i]);
+                clients_fd[i] = -1;
+                continue;
+            }
+            printf("command is: %d, buffer length: %d\n", head.cmd, head.data_len);
+            read(clients_fd[i], buf, head.data_len);
+            if(head.cmd == ENC_PARAMETER)
+            {
+              
+            }
+            
+            sleep(3);
+            char *ret = "processed";
+            write(clients_fd[i], ret, strlen(ret));
+            //handle_client_msg(clients_fd[i], &head, buf);
+        }
+    }
+    delete [] buf;
+}
+
+/**
+ * 在这里处理SGX业务
+ * @param fd
+ * @param buf
+ */
+void handle_client_msg(int fd, struct message_head *head, char *buf) {
+
+    switch (head->cmd) {
+        case ENC_PARAMETER:
+            break;
+        case PRIVATE_KEY:
+            break;
+        case ENCRYPT_DATA:
+            break;
+        case DECRYPT_DATA:
+            break;
+        default:
+            break;
+    }
+
+    int len, i;
+    assert(buf);
+    printf("recv buf is:%s\n", buf);
+    len = strlen(buf);
+    for (i=0; i<len; i++) {
+        if (buf[i] >= 'a' && buf[i] <= 'z') {
+            buf[i] += 'A'- 'a';
+        }
+    }
+    write(fd, buf, strlen(buf));
+
+}
