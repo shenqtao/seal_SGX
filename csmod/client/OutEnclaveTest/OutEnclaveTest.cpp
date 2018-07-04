@@ -622,6 +622,10 @@ int main()
   //cout<<"***************    p_plain_modulus"<<endl;
 	parms.plain_modulus() = conf.p_plain_modulus;
    
+  // send encryption parameters
+  send_to_sgx(client_fd, ENC_PARAMETER, (const char *)&parms, sizeof(EncryptionParameters));
+   
+   
 //  cout << "parms.poly_modulus() count: " << parms.poly_modulus().coeff_count() << endl;
 //  cout << "parms.poly_modulus(): " << parms.poly_modulus().to_string() << endl;
 //	cout << "parms.coeff_modulus(): " << parms.coeff_modulus().to_string() << endl;

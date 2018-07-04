@@ -7,7 +7,9 @@
 /**
  * 支持的命令枚�? */
 typedef enum command {
-    SWITCH_PASSWORD,
+    ENC_PARAMETER,
+    PRIVATE_KEY,
+    PUBLIC_KEY,
     ENCRYPT_DATA,
     DECRYPT_DATA
 }command;
