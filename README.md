@@ -1,4 +1,4 @@
-## Imported seal library in SGX
+## Imported SEAL library in SGX
 
 ### SEAL
 SEAL [homepage](https://www.microsoft.com/en-us/research/project/simple-encrypted-arithmetic-library/)
