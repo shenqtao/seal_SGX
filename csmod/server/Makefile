@@ -162,7 +162,7 @@ socket_server.o: socket_server.cpp
 	@$(CXX) $(App_Cpp_Flags) -c $< -o $@
 	@echo "CXX <= $<"
 
-$(App_Name): OutEnclaveTest/SealEnclaveTest_u.o OutEnclaveTest/MakeConfigure.o OutEnclaveTest/OutEnclaveTest.o OutEnclaveTest/ReadData.o socket_server.o
+$(App_Name): OutEnclaveTest/SealEnclaveTest_u.o OutEnclaveTest/OutEnclaveTest.o OutEnclaveTest/ReadData.o socket_server.o
 	@$(CXX) $^ -o $@ $(App_Link_Flags)
 	@echo "LINK =>  $@"
 
