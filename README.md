@@ -21,7 +21,7 @@ Source files: SealEnclaveTest/, SEAL/
 Configure.txt
 
 ### Usage
-Install Intel SGX linux SDK on a recent platform supporting SGX. One may also test it in simulation mode without SGX support by changing line 5 of ``Makefile`` to ```SGX_MODE ?= HW```. Then:
+Install Intel SGX linux SDK on a recent platform supporting SGX. One may also test it in simulation mode without SGX support by changing line 5 of ``Makefile`` from ```SGX_MODE ?= HW``` to ```SGX_MODE ?= SIM```. Then:
 * make  
 * ./App
 
