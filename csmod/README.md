@@ -7,7 +7,7 @@ As the first step before the communication, the server needs to get the homomorp
 
 Support more HME schemes, at least supporting one GPU-based HME scheme implementation
 
-### Ongoing work
+### In progress
 * The encryption configrations passed into the SGX enclave cannot be recognized correctly. The keys passed into the enclave may also be incorrect.
 ```
 Enclave loaded.
