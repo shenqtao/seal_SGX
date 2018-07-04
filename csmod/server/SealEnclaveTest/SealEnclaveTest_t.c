@@ -44,8 +44,12 @@ typedef struct ms_DecreaseNoise_SGX_t {
 } ms_DecreaseNoise_SGX_t;
 
 typedef struct ms_MakeConfigure_SGX_t {
-	char* ms_ConfigureBuffer;
-	size_t ms_len;
+	char* ms_polymod;
+	int ms_polymodlen;
+	char* ms_coefmod;
+	int ms_coefmodlen;
+	char* ms_plainmod;
+	int ms_plainmodlen;
 } ms_MakeConfigure_SGX_t;
 
 typedef struct ms_AddInRow_SGX_t {
@@ -54,6 +58,10 @@ typedef struct ms_AddInRow_SGX_t {
 	int ms_trainingSize;
 	int ms_precision;
 } ms_AddInRow_SGX_t;
+
+typedef struct ms_ocall_print_t {
+	char* ms_str;
+} ms_ocall_print_t;
 
 typedef struct ms_sgx_oc_cpuidex_t {
 	int* ms_cpuinfo;
@@ -218,26 +226,56 @@ static sgx_status_t SGX_CDECL sgx_MakeConfigure_SGX(void* pms)
 {
 	ms_MakeConfigure_SGX_t* ms = SGX_CAST(ms_MakeConfigure_SGX_t*, pms);
 	sgx_status_t status = SGX_SUCCESS;
-	char* _tmp_ConfigureBuffer = ms->ms_ConfigureBuffer;
-	size_t _tmp_len = ms->ms_len;
-	size_t _len_ConfigureBuffer = _tmp_len;
-	char* _in_ConfigureBuffer = NULL;
+	char* _tmp_polymod = ms->ms_polymod;
+	int _tmp_polymodlen = ms->ms_polymodlen;
+	size_t _len_polymod = _tmp_polymodlen;
+	char* _in_polymod = NULL;
+	char* _tmp_coefmod = ms->ms_coefmod;
+	int _tmp_coefmodlen = ms->ms_coefmodlen;
+	size_t _len_coefmod = _tmp_coefmodlen;
+	char* _in_coefmod = NULL;
+	char* _tmp_plainmod = ms->ms_plainmod;
+	int _tmp_plainmodlen = ms->ms_plainmodlen;
+	size_t _len_plainmod = _tmp_plainmodlen;
+	char* _in_plainmod = NULL;
 
 	CHECK_REF_POINTER(pms, sizeof(ms_MakeConfigure_SGX_t));
-	CHECK_UNIQUE_POINTER(_tmp_ConfigureBuffer, _len_ConfigureBuffer);
+	CHECK_UNIQUE_POINTER(_tmp_polymod, _len_polymod);
+	CHECK_UNIQUE_POINTER(_tmp_coefmod, _len_coefmod);
+	CHECK_UNIQUE_POINTER(_tmp_plainmod, _len_plainmod);
 
-	if (_tmp_ConfigureBuffer != NULL) {
-		_in_ConfigureBuffer = (char*)malloc(_len_ConfigureBuffer);
-		if (_in_ConfigureBuffer == NULL) {
+	if (_tmp_polymod != NULL) {
+		_in_polymod = (char*)malloc(_len_polymod);
+		if (_in_polymod == NULL) {
 			status = SGX_ERROR_OUT_OF_MEMORY;
 			goto err;
 		}
 
-		memcpy(_in_ConfigureBuffer, _tmp_ConfigureBuffer, _len_ConfigureBuffer);
+		memcpy(_in_polymod, _tmp_polymod, _len_polymod);
 	}
-	MakeConfigure_SGX(_in_ConfigureBuffer, _tmp_len);
+	if (_tmp_coefmod != NULL) {
+		_in_coefmod = (char*)malloc(_len_coefmod);
+		if (_in_coefmod == NULL) {
+			status = SGX_ERROR_OUT_OF_MEMORY;
+			goto err;
+		}
+
+		memcpy(_in_coefmod, _tmp_coefmod, _len_coefmod);
+	}
+	if (_tmp_plainmod != NULL) {
+		_in_plainmod = (char*)malloc(_len_plainmod);
+		if (_in_plainmod == NULL) {
+			status = SGX_ERROR_OUT_OF_MEMORY;
+			goto err;
+		}
+
+		memcpy(_in_plainmod, _tmp_plainmod, _len_plainmod);
+	}
+	MakeConfigure_SGX(_in_polymod, _tmp_polymodlen, _in_coefmod, _tmp_coefmodlen, _in_plainmod, _tmp_plainmodlen);
 err:
-	if (_in_ConfigureBuffer) free(_in_ConfigureBuffer);
+	if (_in_polymod) free(_in_polymod);
+	if (_in_coefmod) free(_in_coefmod);
+	if (_in_plainmod) free(_in_plainmod);
 
 	return status;
 }
@@ -291,10 +329,11 @@ SGX_EXTERNC const struct {
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[5][7];
+	uint8_t entry_table[6][7];
 } g_dyn_entry_table = {
-	5,
+	6,
 	{
+		{0, 0, 0, 0, 0, 0, 0, },
 		{0, 0, 0, 0, 0, 0, 0, },
 		{0, 0, 0, 0, 0, 0, 0, },
 		{0, 0, 0, 0, 0, 0, 0, },
@@ -303,6 +342,43 @@ SGX_EXTERNC const struct {
 	}
 };
 
+
+sgx_status_t SGX_CDECL ocall_print(const char* str)
+{
+	sgx_status_t status = SGX_SUCCESS;
+	size_t _len_str = str ? strlen(str) + 1 : 0;
+
+	ms_ocall_print_t* ms = NULL;
+	size_t ocalloc_size = sizeof(ms_ocall_print_t);
+	void *__tmp = NULL;
+
+	ocalloc_size += (str != NULL && sgx_is_within_enclave(str, _len_str)) ? _len_str : 0;
+
+	__tmp = sgx_ocalloc(ocalloc_size);
+	if (__tmp == NULL) {
+		sgx_ocfree();
+		return SGX_ERROR_UNEXPECTED;
+	}
+	ms = (ms_ocall_print_t*)__tmp;
+	__tmp = (void *)((size_t)__tmp + sizeof(ms_ocall_print_t));
+
+	if (str != NULL && sgx_is_within_enclave(str, _len_str)) {
+		ms->ms_str = (char*)__tmp;
+		__tmp = (void *)((size_t)__tmp + _len_str);
+		memcpy((void*)ms->ms_str, str, _len_str);
+	} else if (str == NULL) {
+		ms->ms_str = NULL;
+	} else {
+		sgx_ocfree();
+		return SGX_ERROR_INVALID_PARAMETER;
+	}
+	
+	status = sgx_ocall(0, ms);
+
+
+	sgx_ocfree();
+	return status;
+}
 
 sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf)
 {
@@ -336,7 +412,7 @@ sgx_status_t SGX_CDECL sgx_oc_cpuidex(int cpuinfo[4], int leaf, int subleaf)
 	
 	ms->ms_leaf = leaf;
 	ms->ms_subleaf = subleaf;
-	status = sgx_ocall(0, ms);
+	status = sgx_ocall(1, ms);
 
 	if (cpuinfo) memcpy((void*)cpuinfo, ms->ms_cpuinfo, _len_cpuinfo);
 
@@ -362,7 +438,7 @@ sgx_status_t SGX_CDECL sgx_thread_wait_untrusted_event_ocall(int* retval, const 
 	__tmp = (void *)((size_t)__tmp + sizeof(ms_sgx_thread_wait_untrusted_event_ocall_t));
 
 	ms->ms_self = SGX_CAST(void*, self);
-	status = sgx_ocall(1, ms);
+	status = sgx_ocall(2, ms);
 
 	if (retval) *retval = ms->ms_retval;
 
@@ -388,7 +464,7 @@ sgx_status_t SGX_CDECL sgx_thread_set_untrusted_event_ocall(int* retval, const v
 	__tmp = (void *)((size_t)__tmp + sizeof(ms_sgx_thread_set_untrusted_event_ocall_t));
 
 	ms->ms_waiter = SGX_CAST(void*, waiter);
-	status = sgx_ocall(2, ms);
+	status = sgx_ocall(3, ms);
 
 	if (retval) *retval = ms->ms_retval;
 
@@ -415,7 +491,7 @@ sgx_status_t SGX_CDECL sgx_thread_setwait_untrusted_events_ocall(int* retval, co
 
 	ms->ms_waiter = SGX_CAST(void*, waiter);
 	ms->ms_self = SGX_CAST(void*, self);
-	status = sgx_ocall(3, ms);
+	status = sgx_ocall(4, ms);
 
 	if (retval) *retval = ms->ms_retval;
 
@@ -454,7 +530,7 @@ sgx_status_t SGX_CDECL sgx_thread_set_multiple_untrusted_events_ocall(int* retva
 	}
 	
 	ms->ms_total = total;
-	status = sgx_ocall(4, ms);
+	status = sgx_ocall(5, ms);
 
 	if (retval) *retval = ms->ms_retval;
 

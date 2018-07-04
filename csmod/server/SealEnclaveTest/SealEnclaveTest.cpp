@@ -16,6 +16,21 @@
 using namespace std;
 using namespace seal;
 
+//------------------------------------------------------------------------------
+/*
+* printf:
+*   Invokes OCALL to display the enclave buffer to the terminal.
+*/
+//------------------------------------------------------------------------------
+void printf(const char *fmt, ...) {
+	char buf[BUFSIZ] = { '\0' };
+	va_list ap;
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZ, fmt, ap);
+	va_end(ap);
+	ocall_print(buf);
+}
+
 EncryptionParameters parms_sgx;
 BigPoly secret_key_sgx;
 BigPolyArray public_key;
@@ -67,7 +82,7 @@ void sigmod_sgx(char* buffer, size_t len,int trainingSize,int precision)
 
 void DecreaseNoise_SGX(char* buf, size_t len)
 {
-/*	Encryptor encryptor(parms_sgx, public_key);
+	Encryptor encryptor(parms_sgx, public_key);
 	Decryptor decryptor(parms_sgx, secret_key_sgx);
 
 	Evaluator evaluator(parms_sgx);
@@ -75,7 +90,7 @@ void DecreaseNoise_SGX(char* buf, size_t len)
 	BigPolyArray encrypted_rational;
 	BigPoly plain_result;
 
-	encrypted_rational.load(buf);
+/*	encrypted_rational.load(buf);
 	plain_result = decryptor.decrypt(encrypted_rational);
  
   // ww31: it may need to decode & encode, however I remove it for now
@@ -106,7 +121,13 @@ void set_secret_key(char* secret_key_buffer, size_t len)
 }
 
 
-void MakeConfigure_SGX(char* ConfigureBuffer, size_t len)
+void MakeConfigure_SGX(char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
 {
-	memcpy(&parms_sgx, ConfigureBuffer, len);
+  parms_sgx.poly_modulus() = polymod;
+  parms_sgx.coeff_modulus() = coefmod;
+  parms_sgx.plain_modulus() = atoi(plainmod);
+//	memcpy(&parms_sgx, ConfigureBuffer, len);
+//  printf("sizeof(EncryptionParameters): %d, len: %d\n", sizeof(EncryptionParameters), len);
+  printf("parms_sgx.coeff_modulus_: %s\n", coefmod);
+  printf("parms_sgx.plain_modulus_: %d\n", atoi(plainmod));
 }

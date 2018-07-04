@@ -28,8 +28,12 @@ typedef struct ms_DecreaseNoise_SGX_t {
 } ms_DecreaseNoise_SGX_t;
 
 typedef struct ms_MakeConfigure_SGX_t {
-	char* ms_ConfigureBuffer;
-	size_t ms_len;
+	char* ms_polymod;
+	int ms_polymodlen;
+	char* ms_coefmod;
+	int ms_coefmodlen;
+	char* ms_plainmod;
+	int ms_plainmodlen;
 } ms_MakeConfigure_SGX_t;
 
 typedef struct ms_AddInRow_SGX_t {
@@ -38,6 +42,10 @@ typedef struct ms_AddInRow_SGX_t {
 	int ms_trainingSize;
 	int ms_precision;
 } ms_AddInRow_SGX_t;
+
+typedef struct ms_ocall_print_t {
+	char* ms_str;
+} ms_ocall_print_t;
 
 typedef struct ms_sgx_oc_cpuidex_t {
 	int* ms_cpuinfo;
@@ -66,6 +74,14 @@ typedef struct ms_sgx_thread_set_multiple_untrusted_events_ocall_t {
 	void** ms_waiters;
 	size_t ms_total;
 } ms_sgx_thread_set_multiple_untrusted_events_ocall_t;
+
+static sgx_status_t SGX_CDECL SealEnclaveTest_ocall_print(void* pms)
+{
+	ms_ocall_print_t* ms = SGX_CAST(ms_ocall_print_t*, pms);
+	ocall_print((const char*)ms->ms_str);
+
+	return SGX_SUCCESS;
+}
 
 static sgx_status_t SGX_CDECL SealEnclaveTest_sgx_oc_cpuidex(void* pms)
 {
@@ -109,10 +125,11 @@ static sgx_status_t SGX_CDECL SealEnclaveTest_sgx_thread_set_multiple_untrusted_
 
 static const struct {
 	size_t nr_ocall;
-	void * table[5];
+	void * table[6];
 } ocall_table_SealEnclaveTest = {
-	5,
+	6,
 	{
+		(void*)SealEnclaveTest_ocall_print,
 		(void*)SealEnclaveTest_sgx_oc_cpuidex,
 		(void*)SealEnclaveTest_sgx_thread_wait_untrusted_event_ocall,
 		(void*)SealEnclaveTest_sgx_thread_set_untrusted_event_ocall,
@@ -171,12 +188,16 @@ sgx_status_t DecreaseNoise_SGX(sgx_enclave_id_t eid, char* buf, size_t len)
 	return status;
 }
 
-sgx_status_t MakeConfigure_SGX(sgx_enclave_id_t eid, char* ConfigureBuffer, size_t len)
+sgx_status_t MakeConfigure_SGX(sgx_enclave_id_t eid, char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
 {
 	sgx_status_t status;
 	ms_MakeConfigure_SGX_t ms;
-	ms.ms_ConfigureBuffer = ConfigureBuffer;
-	ms.ms_len = len;
+	ms.ms_polymod = polymod;
+	ms.ms_polymodlen = polymodlen;
+	ms.ms_coefmod = coefmod;
+	ms.ms_coefmodlen = coefmodlen;
+	ms.ms_plainmod = plainmod;
+	ms.ms_plainmodlen = plainmodlen;
 	status = sgx_ecall(eid, 5, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }

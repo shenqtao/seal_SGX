@@ -24,6 +24,11 @@ using namespace std;
 #define DEBUG
 #define SHOWRESULT
 
+//------------------------------------------------------------------------------
+void ocall_print(const char* str) {
+	printf("\033[96m%s\033[0m", str);
+}
+
 //vector<vector<double>> X;
 //vector<double> Y;
 
@@ -173,6 +178,10 @@ int main()
   return 0;
 }
 
+bool flag_polymod = false, flag_coefmod = false, flag_plainmod = false;
+char polymod[100] = {0}, coefmod[100] = {0}, plainmod[100] = {0}; 
+int polymodlen = 0, coefmodlen = 0, plainmodlen = 0;
+bool configured = false;
 // message processing
 /**
  * 通过select查询到fdset之后,循环遍历每个fd是否就绪
@@ -182,6 +191,7 @@ int main()
 void recv_client_msg(int *clients_fd, fd_set *readfds) {
     char *buf = new char[bufflen];
     struct message_head head;
+
     for (size_t i = 0; i < IPC_MAX_CONN; ++i) {
         if (clients_fd[i] == -1) {
             continue;
@@ -197,10 +207,38 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             }
             printf("command is: %d, buffer length: %d\n", head.cmd, head.data_len);
             read(clients_fd[i], buf, head.data_len);
-            if(head.cmd == ENC_PARAMETER)
+            if(head.cmd == ENC_PARAMETER_POLYMOD)
             {
-              MakeConfigure_SGX(eid, buf, head.data_len);
-            }else if(head.cmd == PUBLIC_KEY)
+              flag_polymod = true;
+              strcpy(polymod, buf);
+              polymodlen = head.data_len;
+              if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
+              {
+                configured = true;
+                MakeConfigure_SGX(eid, polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+              }
+            }else if(head.cmd == ENC_PARAMETER_COEFMOD)
+            {
+              flag_coefmod = true;
+              strcpy(coefmod, buf);
+              coefmodlen = head.data_len;
+              if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
+              {
+                configured = true;
+                MakeConfigure_SGX(eid, polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+              }
+            }else if(head.cmd == ENC_PARAMETER_PLAINMOD)
+            {
+              flag_plainmod = true;
+              strcpy(plainmod, buf);
+              plainmodlen = head.data_len;
+              if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
+              {
+                configured = true;
+                MakeConfigure_SGX(eid, polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+              }
+            }
+            else if(head.cmd == PUBLIC_KEY)
             {
               set_public_key(eid, buf, head.data_len);
             }else if(head.cmd == PRIVATE_KEY)
@@ -210,8 +248,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             {
               DecreaseNoise_SGX(eid, buf, head.data_len);
             }
-            
-            sleep(1);
+
             char *ret = "processed";
             write(clients_fd[i], ret, strlen(ret));
             //handle_client_msg(clients_fd[i], &head, buf);

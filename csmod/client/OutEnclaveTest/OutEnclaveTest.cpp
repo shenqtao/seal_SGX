@@ -623,8 +623,9 @@ int main()
 	parms.plain_modulus() = conf.p_plain_modulus;
    
   // send encryption parameters
-  send_to_sgx(client_fd, ENC_PARAMETER, (const char *)&parms, sizeof(EncryptionParameters));
-   
+  send_to_sgx(client_fd, ENC_PARAMETER_POLYMOD, parms.poly_modulus().to_string().c_str(), parms.poly_modulus().to_string().length());
+  send_to_sgx(client_fd, ENC_PARAMETER_COEFMOD, parms.coeff_modulus().to_string().c_str(), parms.coeff_modulus().to_string().length());
+  send_to_sgx(client_fd, ENC_PARAMETER_PLAINMOD, parms.plain_modulus().to_string().c_str(), parms.plain_modulus().to_string().length());
    
 //  cout << "parms.poly_modulus() count: " << parms.poly_modulus().coeff_count() << endl;
 //  cout << "parms.poly_modulus(): " << parms.poly_modulus().to_string() << endl;
@@ -699,6 +700,8 @@ int main()
 #ifdef DEBUG
   delete [] secret_key_buffer;
 #endif
+  delete [] tmp_s_k_b;
+  delete [] tmp_p_k_b;
   close(client_fd);
   return 0;
 }

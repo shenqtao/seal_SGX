@@ -7,13 +7,13 @@ enclave {
   		public void sigmod_sgx([in, out, size=len] char* buffer, size_t len,int trainingSize,int precision);
   		public int check_Index();
   		public void DecreaseNoise_SGX([in,out,size=len] char* buf,size_t len);
-  		public void MakeConfigure_SGX([in,size=len] char* ConfigureBuffer, size_t len);
+  		public void MakeConfigure_SGX([in,size=polymodlen] char* polymod, int polymodlen, [in,size=coefmodlen] char* coefmod, int coefmodlen, [in,size=plainmodlen] char* plainmod, int plainmodlen);
   		public void AddInRow_SGX([in, out, size=len] char* buf, size_t len, int trainingSize, int precision);
 
     };
 
     untrusted {
         /* define OCALLs here. */
-
+      void ocall_print([in, string] const char *str);
     };
 };

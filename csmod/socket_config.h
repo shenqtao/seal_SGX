@@ -7,7 +7,9 @@
 /**
  * 支持的命令枚�? */
 typedef enum command {
-    ENC_PARAMETER,
+    ENC_PARAMETER_POLYMOD,
+    ENC_PARAMETER_COEFMOD,
+    ENC_PARAMETER_PLAINMOD,
     PRIVATE_KEY,
     PUBLIC_KEY,
     ENCRYPT_DATA,
