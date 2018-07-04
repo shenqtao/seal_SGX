@@ -34,7 +34,7 @@ int socket_bind(const char *ip, int port) {
 }
 
 
-static void accpet_client(int *clients_fd, int listen_fd) {
+void accpet_client(int *clients_fd, int listen_fd) {
     int client_fd = accept(listen_fd, NULL, NULL);
     if (client_fd == -1) {
         printf("accept failed: %s.\n", strerror(errno));
@@ -62,7 +62,7 @@ static void accpet_client(int *clients_fd, int listen_fd) {
  * @param clients_fd
  * @param readfds
  */
-static void recv_client_msg(int *clients_fd, fd_set *readfds) {
+void recv_client_msg(int *clients_fd, fd_set *readfds) {
     char *buf = new char[bufflen];
     struct message_head head;
     for (size_t i = 0; i < IPC_MAX_CONN; ++i) {
@@ -94,7 +94,7 @@ static void recv_client_msg(int *clients_fd, fd_set *readfds) {
  * @param fd
  * @param buf
  */
-static void handle_client_msg(int fd, struct message_head *head, char *buf) {
+void handle_client_msg(int fd, struct message_head *head, char *buf) {
 
     switch (head->cmd) {
         case SWITCH_PASSWORD:

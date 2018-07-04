@@ -150,7 +150,7 @@ int main()
 	ret = sgx_create_enclave(ENCLAVE_FILE, SGX_DEBUG_FLAG, &token, &updated, &eid, NULL);
 	if (ret != SGX_SUCCESS)
 		return -1;
-
+  cout<<"Enclave loaded."<<endl;
 	// Initizal the Configure
 	MakeConfigure mconf;
 	mconf.Initalize();
@@ -159,37 +159,37 @@ int main()
 //	parms.poly_modulus() = conf.p_poly_modulus;
 //	parms.coeff_modulus() = ChooserEvaluator::default_parameter_options().at(conf.p_coeff_modulus);
 //	parms.plain_modulus() = conf.p_plain_modulus;
-  	int listen_fd = socket_bind(IPADDRESS, PORT);
-    int max_fd = -1;
-    int nready;
-    fd_set readfds;
-    int clients_fd[IPC_MAX_CONN];
+  int listen_fd = socket_bind(IPADDRESS, PORT);
+  int max_fd = -1;
+  int nready;
+  fd_set readfds;
+  int clients_fd[IPC_MAX_CONN];
+  
+  memset(clients_fd, -1, sizeof(clients_fd));
 
-    memset(clients_fd, -1, sizeof(clients_fd));
-    // select 方式实现IO复用
-    while (true) {
-
-        FD_ZERO(&readfds);
-        FD_SET(listen_fd, &readfds);
-        max_fd = listen_fd;
-
-        for (size_t i=0; i < IPC_MAX_CONN; i++)
-        {
-            if (clients_fd[i] != -1) {
-                FD_SET(clients_fd[i], &readfds);
-                max_fd = clients_fd[i] > max_fd ? clients_fd[i] : max_fd;
-            }
-        }
-        nready = select(max_fd+1, &readfds, NULL, NULL, NULL);
-        if (nready == -1) {
-            perror("select error.");
-            return 1;
-        }
-        if (FD_ISSET(listen_fd, &readfds)) {
-            accpet_client(clients_fd, listen_fd);
-        }
-        recv_client_msg(clients_fd, &readfds);
-    }
+  while (true) {
+  
+      FD_ZERO(&readfds);
+      FD_SET(listen_fd, &readfds);
+      max_fd = listen_fd;
+  
+      for (size_t i=0; i < IPC_MAX_CONN; i++)
+      {
+          if (clients_fd[i] != -1) {
+              FD_SET(clients_fd[i], &readfds);
+              max_fd = clients_fd[i] > max_fd ? clients_fd[i] : max_fd;
+          }
+      }
+      nready = select(max_fd+1, &readfds, NULL, NULL, NULL);
+      if (nready == -1) {
+          perror("select error.");
+          return 1;
+      }
+      if (FD_ISSET(listen_fd, &readfds)) {
+          accpet_client(clients_fd, listen_fd);
+      }
+      recv_client_msg(clients_fd, &readfds);
+  }
 
 	// Destroy the Enclave
 	if (SGX_SUCCESS != sgx_destroy_enclave(eid))

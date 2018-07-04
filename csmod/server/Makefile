@@ -47,7 +47,6 @@ else
 endif
 
 #App_Cpp_Files := $(wildcard OutEnclaveTest/*.cpp) 
-Seal_OutEnclave_Files := $(wildcard Seal_OutEnclave/*.cpp) $(wildcard Seal_OutEnclave/util/*.cpp)
 App_Include_Paths := -I$(SGX_SDK)/include -IOutEnclaveTest -ISeal_OutEnclave -I.
 
 App_C_Flags := $(SGX_COMMON_CFLAGS) -fPIC -Wno-attributes $(App_Include_Paths)
@@ -76,7 +75,6 @@ endif
 
 CXXFLAGS := $(App_Cpp_Flags) -DHAVE_CONFIG_H
 #App_Cpp_Objects := $(App_Cpp_Files:.cpp=.o)
-Seal_OutEnclave_Objects := $(Seal_OutEnclave_Files:.cpp=.o)
 App_Name := App
 
 ######## Enclave Settings ########
@@ -102,7 +100,7 @@ Enclave_Link_Flags := $(SGX_COMMON_CFLAGS) -Wl,--no-undefined -nostdlib -nodefau
 	-Wl,--defsym,__ImageBase=0 \
 	-Wl,--version-script=SealEnclaveTest/SealEnclaveTest.lds
 
-#CXXFLAGS := $(Enclave_Cpp_Flags) -DHAVE_CONFIG_H   # default for c++; CFLAGS for c; CPPFLAGS for both
+CXXFLAGS := $(Enclave_Cpp_Flags) -DHAVE_CONFIG_H   # default for c++; CFLAGS for c; CPPFLAGS for both
 # enable here to compile enclave.so
 
 Enclave_Cpp_Objects := $(Enclave_Cpp_Files:.cpp=.o)
@@ -135,7 +133,7 @@ all: $(App_Name) # $(Enclave_Name) $(Signed_Enclave_Name)
 #	@echo "You can also sign the enclave using an external signing tool. See User's Guide for more details."
 #	@echo "To build the project in simulation mode set SGX_MODE=SIM. To build the project in prerelease mode set SGX_PRERELEASE=1 and SGX_MODE=HW."
 else
-all: $(App_Name) #   $(Signed_Enclave_Name) # enable enclave library here
+all: $(App_Name) $(Signed_Enclave_Name) # enable enclave library here
 #
 endif
 
@@ -159,8 +157,12 @@ OutEnclaveTest/SealEnclaveTest_u.o: OutEnclaveTest/SealEnclaveTest_u.c
 OutEnclaveTest/%.o: OutEnclaveTest/%.cpp
 	@$(CXX) $(App_Cpp_Flags) -c $< -o $@
 	@echo "CXX  <=  $<"
+ 
+socket_server.o: socket_server.cpp
+	@$(CXX) $(App_Cpp_Flags) -c $< -o $@
+	@echo "CXX <= $<"
 
-$(App_Name): OutEnclaveTest/SealEnclaveTest_u.o OutEnclaveTest/MakeConfigure.o OutEnclaveTest/OutEnclaveTest.o OutEnclaveTest/ReadData.o $(Seal_OutEnclave_Objects)
+$(App_Name): OutEnclaveTest/SealEnclaveTest_u.o OutEnclaveTest/MakeConfigure.o OutEnclaveTest/OutEnclaveTest.o OutEnclaveTest/ReadData.o socket_server.o
 	@$(CXX) $^ -o $@ $(App_Link_Flags)
 	@echo "LINK =>  $@"
 
@@ -173,26 +175,6 @@ SealEnclaveTest/SealEnclaveTest_t.c: $(SGX_EDGER8R) SealEnclaveTest/SealEnclaveT
 SealEnclaveTest/SealEnclaveTest_t.o: SealEnclaveTest/SealEnclaveTest_t.c
 	@$(CC) $(Enclave_C_Flags) -c $< -o $@
 	@echo "CC   <=  $<"
-
-#SealEnclaveTest/%.o: SealEnclaveTest/%.cpp SealEnclaveTest/SealEnclaveTest_t.o
-#	@$(CXX) $(Enclave_Cpp_Flags) -c $< -o $@
-#	@echo "CXX  <=  $<"
-
-#SEAL/%.o: SEAL/%.cpp
-#	@$(CXX) $(Enclave_Cpp_Flags) -c $< -o $@
-#	@echo "CXX  <=  $<"
-
-#SEAL/util/%.o: SEAL/util/%.cpp
-#	@$(CXX) $(Enclave_Cpp_Flags) -c $< -o $@
-#	@echo "CXX  <=  $<"
-
-#SealEnclaveTest/SealEnclaveTest.o: SealEnclaveTest/SealEnclaveTest.cpp SealEnclaveTest/SealEnclaveTest_t.o
-#	@$(CXX) $(Enclave_Cpp_Flags) -c SealEnclaveTest/SealEnclaveTest.cpp -o $@
-#	@echo "CXX  <=  $<"
- 
-#$(Enclave_Cpp_Objects): $(Enclave_Cpp_Files)
-#	@$(CXX) $(Enclave_Cpp_Flags) -DHAVE_CONFIG_H -march=native -c $< -o $@
-#	@echo "CXX($(Enclave_Cpp_Objects))  <=  $(Enclave_Cpp_Files)"
 
 $(Enclave_Name): SealEnclaveTest/SealEnclaveTest_t.o $(Enclave_Cpp_Objects) # SealEnclaveTest/SealEnclaveTest.o 
 	@$(CXX) $^ -o $@ $(Enclave_Link_Flags)
