@@ -1,11 +1,6 @@
 #include "SealEnclaveTest_u.h"
 #include <errno.h>
 
-typedef struct ms_foo_t {
-	char* ms_buf;
-	size_t ms_len;
-} ms_foo_t;
-
 
 typedef struct ms_get_public_key_t {
 	char* ms_public_key_buffer;
@@ -126,20 +121,10 @@ static const struct {
 		(void*)SealEnclaveTest_sgx_thread_set_multiple_untrusted_events_ocall,
 	}
 };
-sgx_status_t foo(sgx_enclave_id_t eid, char* buf, size_t len)
-{
-	sgx_status_t status;
-	ms_foo_t ms;
-	ms.ms_buf = buf;
-	ms.ms_len = len;
-	status = sgx_ecall(eid, 0, &ocall_table_SealEnclaveTest, &ms);
-	return status;
-}
-
 sgx_status_t generate_key_sgx(sgx_enclave_id_t eid)
 {
 	sgx_status_t status;
-	status = sgx_ecall(eid, 1, &ocall_table_SealEnclaveTest, NULL);
+	status = sgx_ecall(eid, 0, &ocall_table_SealEnclaveTest, NULL);
 	return status;
 }
 
@@ -149,7 +134,7 @@ sgx_status_t get_public_key(sgx_enclave_id_t eid, char* public_key_buffer, size_
 	ms_get_public_key_t ms;
 	ms.ms_public_key_buffer = public_key_buffer;
 	ms.ms_len = len;
-	status = sgx_ecall(eid, 2, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 1, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
@@ -159,7 +144,7 @@ sgx_status_t get_secret_key(sgx_enclave_id_t eid, char* secret_key_buffer, size_
 	ms_get_secret_key_t ms;
 	ms.ms_secret_key_buffer = secret_key_buffer;
 	ms.ms_len = len;
-	status = sgx_ecall(eid, 3, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 2, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
@@ -171,7 +156,7 @@ sgx_status_t sigmod_sgx(sgx_enclave_id_t eid, char* buffer, size_t len, int trai
 	ms.ms_len = len;
 	ms.ms_trainingSize = trainingSize;
 	ms.ms_precision = precision;
-	status = sgx_ecall(eid, 4, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 3, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
@@ -179,7 +164,7 @@ sgx_status_t check_Index(sgx_enclave_id_t eid, int* retval)
 {
 	sgx_status_t status;
 	ms_check_Index_t ms;
-	status = sgx_ecall(eid, 5, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 4, &ocall_table_SealEnclaveTest, &ms);
 	if (status == SGX_SUCCESS && retval) *retval = ms.ms_retval;
 	return status;
 }
@@ -190,7 +175,7 @@ sgx_status_t DecreaseNoise_SGX(sgx_enclave_id_t eid, char* buf, size_t len)
 	ms_DecreaseNoise_SGX_t ms;
 	ms.ms_buf = buf;
 	ms.ms_len = len;
-	status = sgx_ecall(eid, 6, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 5, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
@@ -200,7 +185,7 @@ sgx_status_t MakeConfigure_SGX(sgx_enclave_id_t eid, char* ConfigureBuffer, size
 	ms_MakeConfigure_SGX_t ms;
 	ms.ms_ConfigureBuffer = ConfigureBuffer;
 	ms.ms_len = len;
-	status = sgx_ecall(eid, 7, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 6, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
@@ -212,7 +197,7 @@ sgx_status_t AddInRow_SGX(sgx_enclave_id_t eid, char* buf, size_t len, int train
 	ms.ms_len = len;
 	ms.ms_trainingSize = trainingSize;
 	ms.ms_precision = precision;
-	status = sgx_ecall(eid, 8, &ocall_table_SealEnclaveTest, &ms);
+	status = sgx_ecall(eid, 7, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 

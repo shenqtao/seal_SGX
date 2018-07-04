@@ -22,7 +22,6 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_untrusted_event_ocall, (const void* wa
 int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const void* waiter, const void* self));
 int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
 
-sgx_status_t foo(sgx_enclave_id_t eid, char* buf, size_t len);
 sgx_status_t generate_key_sgx(sgx_enclave_id_t eid);
 sgx_status_t get_public_key(sgx_enclave_id_t eid, char* public_key_buffer, size_t len);
 sgx_status_t get_secret_key(sgx_enclave_id_t eid, char* secret_key_buffer, size_t len);

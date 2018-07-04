@@ -225,7 +225,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             read(clients_fd[i], buf, head.data_len);
             if(head.cmd == ENC_PARAMETER)
             {
-              
+              MakeConfigure_SGX(eid, buf, head.data_len);
             }
             
             sleep(3);

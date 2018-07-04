@@ -17,11 +17,6 @@
 } while (0)
 
 
-typedef struct ms_foo_t {
-	char* ms_buf;
-	size_t ms_len;
-} ms_foo_t;
-
 
 typedef struct ms_get_public_key_t {
 	char* ms_public_key_buffer;
@@ -88,37 +83,6 @@ typedef struct ms_sgx_thread_set_multiple_untrusted_events_ocall_t {
 	void** ms_waiters;
 	size_t ms_total;
 } ms_sgx_thread_set_multiple_untrusted_events_ocall_t;
-
-static sgx_status_t SGX_CDECL sgx_foo(void* pms)
-{
-	ms_foo_t* ms = SGX_CAST(ms_foo_t*, pms);
-	sgx_status_t status = SGX_SUCCESS;
-	char* _tmp_buf = ms->ms_buf;
-	size_t _tmp_len = ms->ms_len;
-	size_t _len_buf = _tmp_len;
-	char* _in_buf = NULL;
-
-	CHECK_REF_POINTER(pms, sizeof(ms_foo_t));
-	CHECK_UNIQUE_POINTER(_tmp_buf, _len_buf);
-
-	if (_tmp_buf != NULL) {
-		_in_buf = (char*)malloc(_len_buf);
-		if (_in_buf == NULL) {
-			status = SGX_ERROR_OUT_OF_MEMORY;
-			goto err;
-		}
-
-		memcpy(_in_buf, _tmp_buf, _len_buf);
-	}
-	foo(_in_buf, _tmp_len);
-err:
-	if (_in_buf) {
-		memcpy(_tmp_buf, _in_buf, _len_buf);
-		free(_in_buf);
-	}
-
-	return status;
-}
 
 static sgx_status_t SGX_CDECL sgx_generate_key_sgx(void* pms)
 {
@@ -324,11 +288,10 @@ err:
 
 SGX_EXTERNC const struct {
 	size_t nr_ecall;
-	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[9];
+	struct {void* ecall_addr; uint8_t is_priv;} ecall_table[8];
 } g_ecall_table = {
-	9,
+	8,
 	{
-		{(void*)(uintptr_t)sgx_foo, 0},
 		{(void*)(uintptr_t)sgx_generate_key_sgx, 0},
 		{(void*)(uintptr_t)sgx_get_public_key, 0},
 		{(void*)(uintptr_t)sgx_get_secret_key, 0},
@@ -342,15 +305,15 @@ SGX_EXTERNC const struct {
 
 SGX_EXTERNC const struct {
 	size_t nr_ocall;
-	uint8_t entry_table[5][9];
+	uint8_t entry_table[5][8];
 } g_dyn_entry_table = {
 	5,
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, },
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, },
+		{0, 0, 0, 0, 0, 0, 0, 0, },
 	}
 };
 
