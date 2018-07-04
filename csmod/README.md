@@ -8,6 +8,16 @@ As the first step before the communication, the server needs to get the homomorp
 
 Support more HME schemes, at least supporting one GPU-based HME scheme implementation
 
+### Status
+* Communication established.
+* Data transfer success.
+* Encryption configuration transfer success.
+
+### Missing
+* Decrease_noise 
+* Ciphertext after noise decrease sent back to client
+* Bug fix
+
 ### In progress
 
 * After ``decrease_noise`` when the ciphertext is transferred back to the client, the client cannot load it successfully.  
