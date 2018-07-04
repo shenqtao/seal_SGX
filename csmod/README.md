@@ -9,6 +9,10 @@ Support more HME schemes, at least supporting one GPU-based HME scheme implement
 
 ### In progress
 
+* After ``decrease_noise`` when the ciphertext is transferred back to the client, the client cannot load it successfully.
+
+* Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
+
 * Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)
 ```
 new client accpeted
