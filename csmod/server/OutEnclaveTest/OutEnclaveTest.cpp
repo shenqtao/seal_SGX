@@ -143,22 +143,22 @@ void InitialConfigure(MakeConfigure mconf)
 
 int main()
 {
-	// Create sgx enclave
-	sgx_status_t        ret = SGX_SUCCESS;
-	sgx_launch_token_t  token = { 0 };
-	int updated = 0;
-	ret = sgx_create_enclave(ENCLAVE_FILE, SGX_DEBUG_FLAG, &token, &updated, &eid, NULL);
-	if (ret != SGX_SUCCESS)
-		return -1;
+  // Create sgx enclave
+  sgx_status_t        ret = SGX_SUCCESS;
+  sgx_launch_token_t  token = { 0 };
+  int updated = 0;
+  ret = sgx_create_enclave(ENCLAVE_FILE, SGX_DEBUG_FLAG, &token, &updated, &eid, NULL);
+  if (ret != SGX_SUCCESS)
+  	return -1;
   cout<<"Enclave loaded."<<endl;
-	// Initizal the Configure
-	MakeConfigure mconf;
-	mconf.Initalize();
-	InitialConfigure(mconf);
-
-//	parms.poly_modulus() = conf.p_poly_modulus;
-//	parms.coeff_modulus() = ChooserEvaluator::default_parameter_options().at(conf.p_coeff_modulus);
-//	parms.plain_modulus() = conf.p_plain_modulus;
+  // Initizal the Configure
+  MakeConfigure mconf;
+  mconf.Initalize();
+  InitialConfigure(mconf);
+  
+  //	parms.poly_modulus() = conf.p_poly_modulus;
+  //	parms.coeff_modulus() = ChooserEvaluator::default_parameter_options().at(conf.p_coeff_modulus);
+  //	parms.plain_modulus() = conf.p_plain_modulus;
   int listen_fd = socket_bind(IPADDRESS, PORT);
   int max_fd = -1;
   int nready;
@@ -166,7 +166,7 @@ int main()
   int clients_fd[IPC_MAX_CONN];
   
   memset(clients_fd, -1, sizeof(clients_fd));
-
+  
   while (true) {
   
       FD_ZERO(&readfds);
@@ -190,13 +190,13 @@ int main()
       }
       recv_client_msg(clients_fd, &readfds);
   }
-
-	// Destroy the Enclave
-	if (SGX_SUCCESS != sgx_destroy_enclave(eid))
-		cout << "destroy error" << endl;
-	cout << "... Destroy the enclave successfully ..." << endl;
-
-
+  
+  // Destroy the Enclave
+  if (SGX_SUCCESS != sgx_destroy_enclave(eid))
+  	cout << "destroy error" << endl;
+  cout << "... Destroy the enclave successfully ..." << endl;
+  
+  
   return 0;
 }
 
