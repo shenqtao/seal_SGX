@@ -25,5 +25,5 @@ Install Intel SGX linux SDK on a recent platform supporting SGX. One may also te
 * make  
 * ./App
 
-### Ongoing work...
+### Work in progress
 Make it work in client-server mode (see the csmod directory mode for more information)
