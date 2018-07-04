@@ -52,6 +52,11 @@ size_t send_to_sgx(int client_fd, command cmd, const char* buffer, unsigned int 
 
     size_t send_size = sizeof(struct message_head) + sizeof(char)*length;
     char *mem = (char *)malloc(send_size);
+    if(mem == NULL)
+    {
+      printf("Out of memory.\n");
+      return -1;
+    }
 
     memcpy(mem, &head, sizeof(struct message_head));
     memcpy(mem+sizeof(struct message_head), buffer, length);

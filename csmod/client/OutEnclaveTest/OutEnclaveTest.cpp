@@ -638,11 +638,20 @@ int main()
   public_key = generator.public_key();
 	cout << "... Public key generation complete ..." << endl;
 
+  // send public key
+  int buffer_size = 0;
+	char* tmp_p_k_b = public_key.save(buffer_size);
+  send_to_sgx(client_fd, PUBLIC_KEY, (const char *)tmp_p_k_b, buffer_size);
+  
 #ifdef DEBUG
 	//-------------< test for some function and feature >-------------------------------------------------
   secret_key = generator.secret_key();
 	
 	cout << "... secret key generation complete" << endl;
+  // send private key
+  buffer_size = 0;
+	char* tmp_s_k_b = secret_key.save(buffer_size);
+  send_to_sgx(client_fd, PRIVATE_KEY, (const char *)tmp_s_k_b, buffer_size);
 #endif
 
 	int precision = conf.precision;
