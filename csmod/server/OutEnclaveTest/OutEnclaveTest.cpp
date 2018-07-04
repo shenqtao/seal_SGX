@@ -13,7 +13,6 @@
 #include <unordered_map>
 #include <assert.h>
 #include "TestData.h"
-#include "MakeConfigure.h"
 
 using namespace std;
 
@@ -118,28 +117,6 @@ double GetRandom(double min, double max) {
 	return return_ans;
 }*/
 
-void InitialConfigure(MakeConfigure mconf)
-{
-	conf.Sigmoid_itor = mconf.ToInt(mconf.FindConfigure("Sigmoid_itor"));
-	conf.Sigmoid_y_inital = mconf.ToDouble(mconf.FindConfigure("Sigmoid_y_inital"));
-	conf.learningRate = mconf.ToDouble(mconf.FindConfigure("learningRate"));
-	conf.numEpochs = mconf.ToInt(mconf.FindConfigure("runs"));
-	conf.maxItor = mconf.ToDVector(mconf.FindConfigure("maxItor"));
-	conf.psamples = mconf.ToDVector(mconf.FindConfigure("psamples"));
-	conf.p_poly_modulus = mconf.FindConfigure("p_poly_modulus");
-	conf.p_coeff_modulus = mconf.ToInt(mconf.FindConfigure("p_coeff_modulus"));
-	conf.encoder_conf = mconf.ToIVector(mconf.FindConfigure("encoder_conf"));
-	conf.p_plain_modulus = mconf.ToInt(mconf.FindConfigure("p_plain_modulus"));
-
-	char* buffer = mconf.ReturnConf();
-	MakeConfigure_SGX(eid, buffer, 500);
-
-  cout<<"InitialConfigure finished."<<endl;
-	//ReadData rd;
-	//rd.readData(X,Y);
-}
-
-
 int main()
 {
   // Create sgx enclave
@@ -151,9 +128,6 @@ int main()
   	return -1;
   cout<<"Enclave loaded."<<endl;
   // Initizal the Configure
-  MakeConfigure mconf;
-  mconf.Initalize();
-  InitialConfigure(mconf);
   
   //	parms.poly_modulus() = conf.p_poly_modulus;
   //	parms.coeff_modulus() = ChooserEvaluator::default_parameter_options().at(conf.p_coeff_modulus);
@@ -237,10 +211,11 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               DecreaseNoise_SGX(eid, buf, head.data_len);
             }
             
-            sleep(3);
+            sleep(1);
             char *ret = "processed";
             write(clients_fd[i], ret, strlen(ret));
             //handle_client_msg(clients_fd[i], &head, buf);
+            printf("loop finished.\n");
         }
     }
     delete [] buf;

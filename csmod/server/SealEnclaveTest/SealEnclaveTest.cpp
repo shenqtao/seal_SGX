@@ -67,7 +67,7 @@ void sigmod_sgx(char* buffer, size_t len,int trainingSize,int precision)
 
 void DecreaseNoise_SGX(char* buf, size_t len)
 {
-	Encryptor encryptor(parms_sgx, public_key);
+/*	Encryptor encryptor(parms_sgx, public_key);
 	Decryptor decryptor(parms_sgx, secret_key_sgx);
 
 	Evaluator evaluator(parms_sgx);
@@ -86,7 +86,7 @@ void DecreaseNoise_SGX(char* buf, size_t len)
 
 	memcpy(buf, tmp_buf, length);
 
-	delete[] tmp_buf;
+	delete[] tmp_buf;*/
 
 }
 
