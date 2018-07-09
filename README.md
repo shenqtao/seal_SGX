@@ -22,8 +22,8 @@ Configure.txt
 
 ### Usage
 Prerequisite:  
-Install Intel SGX linux SDK on a recent platform supporting SGX.  
-A recent GCC/G++ compiler.
+* Install Intel SGX linux SDK on a recent platform supporting SGX.  
+* A recent GCC/G++ compiler.
 
 One may also test it in simulation mode without SGX support by changing line 5 of ``Makefile`` from ```SGX_MODE ?= HW``` to ```SGX_MODE ?= SIM```. Then:
 * make  
