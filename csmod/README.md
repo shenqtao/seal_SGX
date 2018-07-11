@@ -15,6 +15,8 @@ After ``decrease_noise`` when the ciphertext is transferred back to the client, 
 ### Missing
 - [ ] Multiple clients support
   - Needs to bind the keys to each client
+    - through key configuration
+    - or through multiple enclaves
 - [ ] Scheduling multiple client requests
 - [ ] Bug fix
   - Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
