@@ -17,6 +17,7 @@ After ``decrease_noise`` when the ciphertext is transferred back to the client, 
 - [X] Ciphertext after noise decrease sent back to client
 
 ### Missing
+- [ ] Multiple clients support
 - [ ] Scheduling multiple client requests
 - [ ] Bug fix
   - Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
