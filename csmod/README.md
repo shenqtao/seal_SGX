@@ -18,8 +18,14 @@ After ``decrease_noise`` when the ciphertext is transferred back to the client, 
 
 ### Missing
 - [ ] Multiple clients support
+  - Needs to bind the keys to each client
 - [ ] Scheduling multiple client requests
 - [ ] Bug fix
   - Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
   - Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)   
     Temporarily fixed by ingoring buffer length (<0 or > length)
+
+### A simple scheduling method
+- The server maintains a task queue with priorities
+- The client sent the current distance to the threshold after each (or several) homomorphic computation(s)
+- The server decides which client can send the ciphertext for bootstrapping
