@@ -247,16 +247,19 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             }else if(head.cmd == ENCRYPT_DATA)
             {
               DecreaseNoise_SGX(eid, buf, head.data_len);
+              printf("<<<<<<<<<<<<  Decrease noise in SGX enclave called....<<<<<<last char: %d %d\n", buf[0], buf[100]);
             }
             
-            sleep(1);
+//            sleep(1);
             if(head.cmd == ENCRYPT_DATA)
             {
               write(clients_fd[i], buf, head.data_len);
+              printf("<<<<<<<<<<<<  Written back ciphertext to client.<<<<<<last char: %d %d\n", buf[0], buf[100]);
             }else
             {
               char *ret = "processed";
               write(clients_fd[i], ret, strlen(ret));
+              printf("<<<<<<<<<<<<  Written back processed to client.");
               //handle_client_msg(clients_fd[i], &head, buf);
             }
               printf("loop finished.\n");
