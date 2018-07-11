@@ -9,14 +9,14 @@ As the first step before the communication, the server needs to get the homomorp
 Support more HME schemes, at least supporting one GPU-based HME scheme implementation
 
 ### Status
-* Communication established.
-* Data transfer success.
-* Encryption configuration transfer success.
+- [X] Communication established.
+- [X] Data transfer success.
+- [X] Encryption configuration transfer success.
 
 ### Missing
-* Decrease_noise 
-* Ciphertext after noise decrease sent back to client
-* Bug fix
+- [ ] Decrease_noise 
+- [ ] Ciphertext after noise decrease sent back to client
+- [ ] Bug fix
 
 ### In progress
 
