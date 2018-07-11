@@ -573,17 +573,30 @@ void EncryptedLogisticRegression(
     
     int buffer_length = 0;
 	  char *buffer = inputToSigmoid1.save(buffer_length);
-	
+     
+     
+	  printf("<<<<<<<<<<<<<<<  send chars %d %d\n", buffer[0], buffer[100]);
     send_to_sgx(client_fd, ENCRYPT_DATA, buffer, buffer_length);
     
     char *read_buf = new char[buffer_length];
-    int nread = read(client_fd, read_buf, buffer_length);
+    char *tmp = read_buf;
+    int total_length = 0;
+recv:
+    int nread = read(client_fd, tmp, buffer_length);
+    
     if (nread <= 0) {
         close(client_fd);
         break;
     } else {
+        total_length += nread;
+        if(total_length < buffer_length) 
+        {
+          tmp += nread;
+          goto recv;
+        }
         printf("recv %s.\n", read_buf);
-    //    inputToSigmoid1.load(read_buf);
+        printf("<<<<<<<<<<<<<<<  recv chars %d %d, length: %d\n", read_buf[0], read_buf[100], total_length);
+//        inputToSigmoid1.load(read_buf);
     }
     delete [] read_buf;
    
@@ -624,11 +637,40 @@ int main()
 	parms.coeff_modulus() = ChooserEvaluator::default_parameter_options().at(conf.p_coeff_modulus);
   //cout<<"***************    p_plain_modulus"<<endl;
 	parms.plain_modulus() = conf.p_plain_modulus;
+  
+  int buffer_length = 1000;
+  char *read_buf = new char[buffer_length];
+  int nread;
+
    
   // send encryption parameters
   send_to_sgx(client_fd, ENC_PARAMETER_POLYMOD, parms.poly_modulus().to_string().c_str(), parms.poly_modulus().to_string().length());
+  nread = read(client_fd, read_buf, buffer_length);
+  if (nread <= 0) {
+      close(client_fd);
+      return -1;
+  } else {
+      printf("recv %s.\n", read_buf);
+      printf("<<<<<<<<<<<<<<<  recv chars %d %d\n", read_buf[0], read_buf[100]);
+  }
   send_to_sgx(client_fd, ENC_PARAMETER_COEFMOD, parms.coeff_modulus().to_string().c_str(), parms.coeff_modulus().to_string().length());
+  nread = read(client_fd, read_buf, buffer_length);
+  if (nread <= 0) {
+      close(client_fd);
+      return -1;
+  } else {
+      printf("recv %s.\n", read_buf);
+      printf("<<<<<<<<<<<<<<<  recv chars %d %d\n", read_buf[0], read_buf[100]);
+  }
   send_to_sgx(client_fd, ENC_PARAMETER_PLAINMOD, parms.plain_modulus().to_string().c_str(), parms.plain_modulus().to_string().length());
+  nread = read(client_fd, read_buf, buffer_length);
+  if (nread <= 0) {
+      close(client_fd);
+      return -1;
+  } else {
+      printf("recv %s.\n", read_buf);
+      printf("<<<<<<<<<<<<<<<  recv chars %d %d\n", read_buf[0], read_buf[100]);
+  }
    
 //  cout << "parms.poly_modulus() count: " << parms.poly_modulus().coeff_count() << endl;
 //  cout << "parms.poly_modulus(): " << parms.poly_modulus().to_string() << endl;
@@ -646,6 +688,14 @@ int main()
   int buffer_size = 0;
 	char* tmp_p_k_b = public_key.save(buffer_size);
   send_to_sgx(client_fd, PUBLIC_KEY, (const char *)tmp_p_k_b, buffer_size);
+  nread = read(client_fd, read_buf, buffer_length);
+  if (nread <= 0) {
+      close(client_fd);
+      return -1;
+  } else {
+      printf("recv %s.\n", read_buf);
+      printf("<<<<<<<<<<<<<<<  recv chars %d %d\n", read_buf[0], read_buf[100]);
+  }
   
 #ifdef DEBUG
 	//-------------< test for some function and feature >-------------------------------------------------
@@ -656,6 +706,14 @@ int main()
   buffer_size = 0;
 	char* tmp_s_k_b = secret_key.save(buffer_size);
   send_to_sgx(client_fd, PRIVATE_KEY, (const char *)tmp_s_k_b, buffer_size);
+  nread = read(client_fd, read_buf, buffer_length);
+  if (nread <= 0) {
+      close(client_fd);
+      return -1;
+  } else {
+      printf("recv %s.\n", read_buf);
+      printf("<<<<<<<<<<<<<<<  recv chars %d %d\n", read_buf[0], read_buf[100]);
+  }
 #endif
 
 	int precision = conf.precision;
@@ -705,6 +763,7 @@ int main()
 #endif
   delete [] tmp_s_k_b;
   delete [] tmp_p_k_b;
+  delete [] read_buf;
   close(client_fd);
   return 0;
 }
