@@ -12,20 +12,20 @@ Support more HME schemes, at least supporting one GPU-based HME scheme implement
 - [X] Communication established.
 - [X] Data transfer success.
 - [X] Encryption configuration transfer success.
+- [X] Decrease_noise   
+After ``decrease_noise`` when the ciphertext is transferred back to the client, the client cannot load it successfully.(_fixed_) 
+- [X] Ciphertext after noise decrease sent back to client
 
 ### Missing
-- [ ] Decrease_noise 
-- [ ] Ciphertext after noise decrease sent back to client
+- [ ] Scheduling multiple client requests
 - [ ] Bug fix
 
 ### In progress
 
-* After ``decrease_noise`` when the ciphertext is transferred back to the client, the client cannot load it successfully.  
-**Need to make sure the ``decrease_noise`` finishes correctly.**
-
 * Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
 
-* Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)
+* Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)   
+Temporarily fixed by ingoring buffer length (<0 or > length)
 ```
 new client accpeted
 command is: 0, buffer length: 144
