@@ -596,7 +596,7 @@ recv:
         }
         printf("recv %s.\n", read_buf);
         printf("<<<<<<<<<<<<<<<  recv chars %d %d, length: %d\n", read_buf[0], read_buf[100], total_length);
-//        inputToSigmoid1.load(read_buf);
+        inputToSigmoid1.load(read_buf);
     }
     delete [] read_buf;
    
