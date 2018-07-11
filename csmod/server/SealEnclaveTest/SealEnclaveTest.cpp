@@ -90,7 +90,7 @@ void DecreaseNoise_SGX(char* buf, size_t len)
 	BigPolyArray encrypted_rational;
 	BigPoly plain_result;
 
-/*	encrypted_rational.load(buf);
+	encrypted_rational.load(buf);
 	plain_result = decryptor.decrypt(encrypted_rational);
  
   // ww31: it may need to decode & encode, however I remove it for now
@@ -101,7 +101,7 @@ void DecreaseNoise_SGX(char* buf, size_t len)
 
 	memcpy(buf, tmp_buf, length);
 
-	delete[] tmp_buf;*/
+	delete[] tmp_buf;
 
 }
 
