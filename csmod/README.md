@@ -4,10 +4,6 @@ Whenever a bootstrapping is needed (i.e. the noise exceeds a threshold, which ca
 
 As the first step before the communication, the server needs to get the homomorphic encryption key configuration, and the private key (after a remote attestation is performed and the key agreement is established).
 
-### Future work
-
-Support more HME schemes, at least supporting one GPU-based HME scheme implementation
-
 ### Status
 - [X] Communication established.
 - [X] Data transfer success.
@@ -27,5 +23,8 @@ After ``decrease_noise`` when the ciphertext is transferred back to the client, 
 
 ### A simple scheduling method
 - The server maintains a task queue with priorities
-- The client sent the current distance to the threshold after each (or several) homomorphic computation(s)
+- The client sents the current distance to the threshold after each (or several) homomorphic computation(s)
 - The server decides which client can send the ciphertext for bootstrapping
+
+### Future work
+- Support more HME schemes, at least one GPU-based HME scheme implementation
