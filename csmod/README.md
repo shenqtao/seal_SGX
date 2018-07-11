@@ -19,23 +19,6 @@ After ``decrease_noise`` when the ciphertext is transferred back to the client, 
 ### Missing
 - [ ] Scheduling multiple client requests
 - [ ] Bug fix
-
-### In progress
-
-* Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
-
-* Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)   
-Temporarily fixed by ingoring buffer length (<0 or > length)
-```
-new client accpeted
-command is: 0, buffer length: 144
-loop finished.
-command is: 2, buffer length: 524365
-loop finished.
-command is: 1, buffer length: 262185
-loop finished.
-command is: 3, buffer length: 786541
-loop finished.
-command is: 47800, buffer length: -1534722048
-*** buffer overflow detected ***: ./App terminated
-```
+  - Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
+  - Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)   
+    Temporarily fixed by ingoring buffer length (<0 or > length)
