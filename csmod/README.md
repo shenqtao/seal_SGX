@@ -21,7 +21,7 @@ After ``decrease_noise`` when the ciphertext is transferred back to the client, 
 - [ ] Bug fix
   - Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
   - Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)   
-    Temporarily fixed by ingoring buffer length (<0 or > length)
+    Temporarily fixed by ingnoring buffer length is < 0 or > length
 
 ### A simple scheduling method
 - The server maintains a task queue with priorities
