@@ -18,10 +18,10 @@ extern "C" {
 
 void set_public_key(char* public_key_buffer, size_t len);
 void set_secret_key(char* secret_key_buffer, size_t len);
-void sigmod_sgx(char* buffer, size_t len, int trainingSize, int precision);
+void sigmod_sgx(int client_id, char* buffer, size_t len, int trainingSize, int precision);
 int check_Index();
-void DecreaseNoise_SGX(char* buf, size_t len);
-void MakeConfigure_SGX(char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen);
+void DecreaseNoise_SGX(int client_id, char* buf, size_t len);
+void MakeConfigure_SGX(int client_id, char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen);
 void AddInRow_SGX(char* buf, size_t len, int trainingSize, int precision);
 
 sgx_status_t SGX_CDECL ocall_print(const char* str);

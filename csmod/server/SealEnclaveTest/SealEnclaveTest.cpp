@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string>
 #include <cmath>
+#include <map>
 
 using namespace std;
 using namespace seal;
@@ -31,7 +32,8 @@ void printf(const char *fmt, ...) {
 	ocall_print(buf);
 }
 
-EncryptionParameters parms_sgx;
+map<int, EncryptionParameters> parms_sgx;
+//EncryptionParameters parms_sgx;
 BigPoly secret_key_sgx;
 BigPolyArray public_key;
 double decrypted_number;
@@ -46,17 +48,17 @@ int check_Index()
 	return flag;
 }
 
-void sigmod_sgx(char* buffer, size_t len,int trainingSize,int precision)
+void sigmod_sgx(int client_id, char* buffer, size_t len,int trainingSize,int precision)
 {	
 	
-	Encryptor encryptor(parms_sgx, public_key);
-	Decryptor decryptor(parms_sgx, secret_key_sgx);
+	Encryptor encryptor(parms_sgx[client_id], public_key);
+	Decryptor decryptor(parms_sgx[client_id], secret_key_sgx);
 	BigPolyArray input;
 	input.load(buffer);
 
-	PolyCRTBuilder crtbuilder(parms_sgx);
+	PolyCRTBuilder crtbuilder(parms_sgx[client_id]);
 	int slot_count = crtbuilder.get_slot_count();
-	vector<BigUInt> values(slot_count, BigUInt(parms_sgx.plain_modulus().bit_count(), static_cast<uint64_t>(0)));
+	vector<BigUInt> values(slot_count, BigUInt(parms_sgx[client_id].plain_modulus().bit_count(), static_cast<uint64_t>(0)));
 
 	BigPoly ans = decryptor.decrypt(input);
 	crtbuilder.decompose(ans, values);
@@ -80,12 +82,15 @@ void sigmod_sgx(char* buffer, size_t len,int trainingSize,int precision)
 	delete[] tmp_buf;
 }
 
-void DecreaseNoise_SGX(char* buf, size_t len)
+void DecreaseNoise_SGX(int client_id, char* buf, size_t len)
 {
-	Encryptor encryptor(parms_sgx, public_key);
-	Decryptor decryptor(parms_sgx, secret_key_sgx);
+  // test whether the public/private keys have been set
+  // if yes, retrieve the keys; otherwise, print error message
+  
+	Encryptor encryptor(parms_sgx[client_id], public_key);
+	Decryptor decryptor(parms_sgx[client_id], secret_key_sgx);
 
-	Evaluator evaluator(parms_sgx);
+//	Evaluator evaluator(parms_sgx);
 	BigPoly encoded_number;
 	BigPolyArray encrypted_rational;
 	BigPoly plain_result;
@@ -121,11 +126,12 @@ void set_secret_key(char* secret_key_buffer, size_t len)
 }
 
 
-void MakeConfigure_SGX(char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
+void MakeConfigure_SGX(int client_id, char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
 {
-  parms_sgx.poly_modulus() = polymod;
-  parms_sgx.coeff_modulus() = coefmod;
-  parms_sgx.plain_modulus() = atoi(plainmod);
+  parms_sgx[client_id].poly_modulus() = polymod;
+  parms_sgx[client_id].coeff_modulus() = coefmod;
+  parms_sgx[client_id].plain_modulus() = atoi(plainmod);
+  printf("................. client id: %d\n", client_id);
 //	memcpy(&parms_sgx, ConfigureBuffer, len);
 //  printf("sizeof(EncryptionParameters): %d, len: %d\n", sizeof(EncryptionParameters), len);
   printf("parms_sgx.coeff_modulus_: %s\n", coefmod);

@@ -12,6 +12,7 @@ typedef struct ms_set_secret_key_t {
 } ms_set_secret_key_t;
 
 typedef struct ms_sigmod_sgx_t {
+	int ms_client_id;
 	char* ms_buffer;
 	size_t ms_len;
 	int ms_trainingSize;
@@ -23,11 +24,13 @@ typedef struct ms_check_Index_t {
 } ms_check_Index_t;
 
 typedef struct ms_DecreaseNoise_SGX_t {
+	int ms_client_id;
 	char* ms_buf;
 	size_t ms_len;
 } ms_DecreaseNoise_SGX_t;
 
 typedef struct ms_MakeConfigure_SGX_t {
+	int ms_client_id;
 	char* ms_polymod;
 	int ms_polymodlen;
 	char* ms_coefmod;
@@ -157,10 +160,11 @@ sgx_status_t set_secret_key(sgx_enclave_id_t eid, char* secret_key_buffer, size_
 	return status;
 }
 
-sgx_status_t sigmod_sgx(sgx_enclave_id_t eid, char* buffer, size_t len, int trainingSize, int precision)
+sgx_status_t sigmod_sgx(sgx_enclave_id_t eid, int client_id, char* buffer, size_t len, int trainingSize, int precision)
 {
 	sgx_status_t status;
 	ms_sigmod_sgx_t ms;
+	ms.ms_client_id = client_id;
 	ms.ms_buffer = buffer;
 	ms.ms_len = len;
 	ms.ms_trainingSize = trainingSize;
@@ -178,20 +182,22 @@ sgx_status_t check_Index(sgx_enclave_id_t eid, int* retval)
 	return status;
 }
 
-sgx_status_t DecreaseNoise_SGX(sgx_enclave_id_t eid, char* buf, size_t len)
+sgx_status_t DecreaseNoise_SGX(sgx_enclave_id_t eid, int client_id, char* buf, size_t len)
 {
 	sgx_status_t status;
 	ms_DecreaseNoise_SGX_t ms;
+	ms.ms_client_id = client_id;
 	ms.ms_buf = buf;
 	ms.ms_len = len;
 	status = sgx_ecall(eid, 4, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
-sgx_status_t MakeConfigure_SGX(sgx_enclave_id_t eid, char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
+sgx_status_t MakeConfigure_SGX(sgx_enclave_id_t eid, int client_id, char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
 {
 	sgx_status_t status;
 	ms_MakeConfigure_SGX_t ms;
+	ms.ms_client_id = client_id;
 	ms.ms_polymod = polymod;
 	ms.ms_polymodlen = polymodlen;
 	ms.ms_coefmod = coefmod;

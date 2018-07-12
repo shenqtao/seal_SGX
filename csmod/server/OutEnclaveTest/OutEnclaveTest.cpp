@@ -206,6 +206,11 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
                 continue;
             }
             printf("command is: %d, buffer length: %d\n", head.cmd, head.data_len);
+            if(head.data_len > bufflen || head.data_len < 0)
+            {
+              printf("overflow detected.\n");
+              continue;
+            }
             read(clients_fd[i], buf, head.data_len);
             if(head.cmd == ENC_PARAMETER_POLYMOD)
             {
@@ -215,7 +220,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
               {
                 configured = true;
-                MakeConfigure_SGX(eid, polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+                MakeConfigure_SGX(eid, clients_fd[i], polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
               }
             }else if(head.cmd == ENC_PARAMETER_COEFMOD)
             {
@@ -225,7 +230,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
               {
                 configured = true;
-                MakeConfigure_SGX(eid, polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+                MakeConfigure_SGX(eid, clients_fd[i], polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
               }
             }else if(head.cmd == ENC_PARAMETER_PLAINMOD)
             {
@@ -235,7 +240,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
               {
                 configured = true;
-                MakeConfigure_SGX(eid, polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+                MakeConfigure_SGX(eid, clients_fd[i], polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
               }
             }
             else if(head.cmd == PUBLIC_KEY)
@@ -246,8 +251,11 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               set_secret_key(eid, buf, head.data_len);
             }else if(head.cmd == ENCRYPT_DATA)
             {
-              DecreaseNoise_SGX(eid, buf, head.data_len);
               printf("<<<<<<<<<<<<  Decrease noise in SGX enclave called....<<<<<<last char: %d %d\n", buf[0], buf[100]);
+              DecreaseNoise_SGX(eid, clients_fd[i], buf, head.data_len);
+            }else
+            {
+              printf(">>> unknown command.\n");
             }
             
 //            sleep(1);
@@ -262,7 +270,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               printf("<<<<<<<<<<<<  Written back processed to client.");
               //handle_client_msg(clients_fd[i], &head, buf);
             }
-              printf("loop finished.\n");
+            printf("loop finished.\n");
         }
     }
     delete [] buf;

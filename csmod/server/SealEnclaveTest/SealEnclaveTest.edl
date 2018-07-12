@@ -2,12 +2,12 @@ enclave {
     from "sgx_tstdc.edl" import *;
 
     trusted {
-  		public void set_public_key([in, size=len] char* public_key_buffer,size_t len);
-  		public void set_secret_key([in, size=len] char* secret_key_buffer,size_t len);
-  		public void sigmod_sgx([in, out, size=len] char* buffer, size_t len,int trainingSize,int precision);
+  		public void set_public_key([in, size=len] char* public_key_buffer, size_t len);
+  		public void set_secret_key([in, size=len] char* secret_key_buffer, size_t len);
+  		public void sigmod_sgx(int client_id, [in, out, size=len] char* buffer, size_t len,int trainingSize,int precision);
   		public int check_Index();
-  		public void DecreaseNoise_SGX([in,out,size=len] char* buf,size_t len);
-  		public void MakeConfigure_SGX([in,size=polymodlen] char* polymod, int polymodlen, [in,size=coefmodlen] char* coefmod, int coefmodlen, [in,size=plainmodlen] char* plainmod, int plainmodlen);
+  		public void DecreaseNoise_SGX(int client_id, [in,out,size=len] char* buf, size_t len);
+  		public void MakeConfigure_SGX(int client_id, [in,size=polymodlen] char* polymod, int polymodlen, [in, size=coefmodlen] char* coefmod, int coefmodlen, [in,size=plainmodlen] char* plainmod, int plainmodlen);
   		public void AddInRow_SGX([in, out, size=len] char* buf, size_t len, int trainingSize, int precision);
 
     };

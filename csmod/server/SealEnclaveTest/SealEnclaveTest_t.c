@@ -28,6 +28,7 @@ typedef struct ms_set_secret_key_t {
 } ms_set_secret_key_t;
 
 typedef struct ms_sigmod_sgx_t {
+	int ms_client_id;
 	char* ms_buffer;
 	size_t ms_len;
 	int ms_trainingSize;
@@ -39,11 +40,13 @@ typedef struct ms_check_Index_t {
 } ms_check_Index_t;
 
 typedef struct ms_DecreaseNoise_SGX_t {
+	int ms_client_id;
 	char* ms_buf;
 	size_t ms_len;
 } ms_DecreaseNoise_SGX_t;
 
 typedef struct ms_MakeConfigure_SGX_t {
+	int ms_client_id;
 	char* ms_polymod;
 	int ms_polymodlen;
 	char* ms_coefmod;
@@ -168,7 +171,7 @@ static sgx_status_t SGX_CDECL sgx_sigmod_sgx(void* pms)
 
 		memcpy(_in_buffer, _tmp_buffer, _len_buffer);
 	}
-	sigmod_sgx(_in_buffer, _tmp_len, ms->ms_trainingSize, ms->ms_precision);
+	sigmod_sgx(ms->ms_client_id, _in_buffer, _tmp_len, ms->ms_trainingSize, ms->ms_precision);
 err:
 	if (_in_buffer) {
 		memcpy(_tmp_buffer, _in_buffer, _len_buffer);
@@ -212,7 +215,7 @@ static sgx_status_t SGX_CDECL sgx_DecreaseNoise_SGX(void* pms)
 
 		memcpy(_in_buf, _tmp_buf, _len_buf);
 	}
-	DecreaseNoise_SGX(_in_buf, _tmp_len);
+	DecreaseNoise_SGX(ms->ms_client_id, _in_buf, _tmp_len);
 err:
 	if (_in_buf) {
 		memcpy(_tmp_buf, _in_buf, _len_buf);
@@ -271,7 +274,7 @@ static sgx_status_t SGX_CDECL sgx_MakeConfigure_SGX(void* pms)
 
 		memcpy(_in_plainmod, _tmp_plainmod, _len_plainmod);
 	}
-	MakeConfigure_SGX(_in_polymod, _tmp_polymodlen, _in_coefmod, _tmp_coefmodlen, _in_plainmod, _tmp_plainmodlen);
+	MakeConfigure_SGX(ms->ms_client_id, _in_polymod, _tmp_polymodlen, _in_coefmod, _tmp_coefmodlen, _in_plainmod, _tmp_plainmodlen);
 err:
 	if (_in_polymod) free(_in_polymod);
 	if (_in_coefmod) free(_in_coefmod);
