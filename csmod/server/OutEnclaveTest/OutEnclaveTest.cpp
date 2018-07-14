@@ -179,16 +179,20 @@ int main()
   return 0;
 }
 
+// multiple clients
 bool establish_connection[IPC_MAX_CONN] = {false};
 map<int, bool> flag_polymod, flag_coefmod, flag_plainmod, configured;
 map<int, int> polymodlen, coefmodlen, plainmodlen;
-map<int, char *> polymod, coefmod, plainmod;
+map<int, char *> polymod, coefmod, plainmod; 
 
 
+/* single client  
 //bool flag_polymod = false, flag_coefmod = false, flag_plainmod = false;
 //char polymod[100] = {0}, coefmod[100] = {0}, plainmod[100] = {0}; 
 //int polymodlen = 0, coefmodlen = 0, plainmodlen = 0;
 //bool configured = false;
+*/
+
 // message processing
 /**
  * 通过select查询到fdset之后,循环遍历每个fd是否就绪
@@ -197,7 +201,6 @@ map<int, char *> polymod, coefmod, plainmod;
  */
 void recv_client_msg(int *clients_fd, fd_set *readfds) {
     char *buf = new char[bufflen];
-    memset(buf, 0, bufflen);
     struct message_head head;
 
     for (size_t i = 0; i < IPC_MAX_CONN; ++i) {
@@ -212,7 +215,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               polymodlen[i] = 0, coefmodlen[i] = 0, plainmodlen[i] = 0;
               polymod[i] = new char[100];
               coefmod[i] = new char[100];
-              plainmod[i] = new char[100];    // !!!!!!!!!!!  need to free the memory later
+              plainmod[i] = new char[100];
             }
             int n = read(clients_fd[i], &head, sizeof(struct message_head));
             if (n <= 0) {
@@ -221,6 +224,11 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
                 close(clients_fd[i]);
                 clients_fd[i] = -1;
                 establish_connection[i] = false;
+                
+                delete [] polymod[i];
+                delete [] coefmod[i];
+                delete [] plainmod[i];
+              
                 continue;
             }
             printf("command is: %d, buffer length: %d\n", head.cmd, head.data_len);
@@ -233,7 +241,6 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             if(head.cmd == ENC_PARAMETER_POLYMOD)
             {
               flag_polymod[i] = true;
-              memset(polymod[i], 0, 100);
               strncpy(polymod[i], buf, head.data_len);
               polymodlen[i] = head.data_len;
               printf(">>>>>>>>>>>>>>   recv polymod: %s, %s, length: %d\n", polymod[i], buf, polymodlen[i]);
@@ -245,7 +252,6 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             }else if(head.cmd == ENC_PARAMETER_COEFMOD)
             {
               flag_coefmod[i] = true;
-              memset(coefmod[i], 0, 100);
               strncpy(coefmod[i], buf, head.data_len);
               coefmodlen[i] = head.data_len;
               if(!configured[i] && flag_polymod[i] && flag_coefmod[i] && flag_plainmod[i])
@@ -256,7 +262,7 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             }else if(head.cmd == ENC_PARAMETER_PLAINMOD)
             {
               flag_plainmod[i] = true;
-              memset(plainmod[i], 0, 100);
+
               strncpy(plainmod[i], buf, head.data_len);
               plainmodlen[i] = head.data_len;
               if(!configured[i] && flag_polymod[i] && flag_coefmod[i] && flag_plainmod[i])
