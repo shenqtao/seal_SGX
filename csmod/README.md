@@ -11,22 +11,19 @@ As the first step before the communication, the server needs to get the homomorp
 - [X] Decrease_noise   
 After ``decrease_noise`` when the ciphertext is transferred back to the client, the client cannot load it successfully.(_fixed_) 
 - [X] Ciphertext after noise decrease sent back to client
-
-### Missing
-- [ ] Multiple clients support
+- [X] Multiple clients support
   - Needs to bind the keys to each client
-    - through key configuration
-    - or through multiple enclaves
+  
+### Missing
 - [ ] Scheduling multiple client requests
+  - A simple scheduling method
+    - The server maintains a task queue with priorities
+    - The client sents the current distance to the threshold after each (or several) homomorphic computation(s)
+    - The server decides which client can send the ciphertext for bootstrapping
 - [ ] Bug fix
   - Even if ``decrease_noise`` is not called, the client & server channel sometimes terminate unexpectly.
   - Possible crashes when the data trasfered through socket communication is incorrect. (rare cases)   
     Temporarily fixed by ingnoring buffer length is < 0 or > length
-
-### A simple scheduling method
-- The server maintains a task queue with priorities
-- The client sents the current distance to the threshold after each (or several) homomorphic computation(s)
-- The server decides which client can send the ciphertext for bootstrapping
 
 ### Future work
 - Support more HME schemes, at least one GPU-based HME scheme implementation
