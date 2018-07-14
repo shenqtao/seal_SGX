@@ -34,8 +34,13 @@ void printf(const char *fmt, ...) {
 
 map<int, EncryptionParameters> parms_sgx;
 //EncryptionParameters parms_sgx;
-BigPoly secret_key_sgx;
-BigPolyArray public_key;
+map<int, BigPoly> secret_key_sgx;
+//BigPoly secret_key_sgx;
+map<int, BigPolyArray> public_key;
+//BigPolyArray public_key;
+
+
+
 double decrypted_number;
 
 int check_Index()
@@ -51,8 +56,8 @@ int check_Index()
 void sigmod_sgx(int client_id, char* buffer, size_t len,int trainingSize,int precision)
 {	
 	
-	Encryptor encryptor(parms_sgx[client_id], public_key);
-	Decryptor decryptor(parms_sgx[client_id], secret_key_sgx);
+	Encryptor encryptor(parms_sgx[client_id], public_key[client_id]);
+	Decryptor decryptor(parms_sgx[client_id], secret_key_sgx[client_id]);
 	BigPolyArray input;
 	input.load(buffer);
 
@@ -87,8 +92,8 @@ void DecreaseNoise_SGX(int client_id, char* buf, size_t len)
   // test whether the public/private keys have been set
   // if yes, retrieve the keys; otherwise, print error message
   
-	Encryptor encryptor(parms_sgx[client_id], public_key);
-	Decryptor decryptor(parms_sgx[client_id], secret_key_sgx);
+	Encryptor encryptor(parms_sgx[client_id], public_key[client_id]);
+	Decryptor decryptor(parms_sgx[client_id], secret_key_sgx[client_id]);
 
 //	Evaluator evaluator(parms_sgx);
 	BigPoly encoded_number;
@@ -115,23 +120,28 @@ void AddInRow_SGX(char* buf, size_t len,int trainingSize,int precision)
 {
 }
 
-void set_public_key(char* public_key_buffer, size_t len)
+void set_public_key(int client_id, char* public_key_buffer, size_t len)
 {
-  public_key.load(public_key_buffer);
+  public_key[client_id].load(public_key_buffer);
 }
 
-void set_secret_key(char* secret_key_buffer, size_t len)
+void set_secret_key(int client_id, char* secret_key_buffer, size_t len)
 {
-  secret_key_sgx.load(secret_key_buffer);
+  secret_key_sgx[client_id].load(secret_key_buffer);
 }
 
 
 void MakeConfigure_SGX(int client_id, char* polymod, int polymodlen, char* coefmod, int coefmodlen, char* plainmod, int plainmodlen)
 {
+  polymod[polymodlen] = 0;
+  coefmod[coefmodlen] = 0;
+  plainmod[plainmodlen] = 0;
+  printf("................. client id: %d, polymod: %s, length: %d\n", client_id, polymod, polymodlen);
+  
   parms_sgx[client_id].poly_modulus() = polymod;
   parms_sgx[client_id].coeff_modulus() = coefmod;
   parms_sgx[client_id].plain_modulus() = atoi(plainmod);
-  printf("................. client id: %d\n", client_id);
+  
 //	memcpy(&parms_sgx, ConfigureBuffer, len);
 //  printf("sizeof(EncryptionParameters): %d, len: %d\n", sizeof(EncryptionParameters), len);
   printf("parms_sgx.coeff_modulus_: %s\n", coefmod);

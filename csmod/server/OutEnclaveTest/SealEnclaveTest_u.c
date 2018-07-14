@@ -2,11 +2,13 @@
 #include <errno.h>
 
 typedef struct ms_set_public_key_t {
+	int ms_client_id;
 	char* ms_public_key_buffer;
 	size_t ms_len;
 } ms_set_public_key_t;
 
 typedef struct ms_set_secret_key_t {
+	int ms_client_id;
 	char* ms_secret_key_buffer;
 	size_t ms_len;
 } ms_set_secret_key_t;
@@ -140,20 +142,22 @@ static const struct {
 		(void*)SealEnclaveTest_sgx_thread_set_multiple_untrusted_events_ocall,
 	}
 };
-sgx_status_t set_public_key(sgx_enclave_id_t eid, char* public_key_buffer, size_t len)
+sgx_status_t set_public_key(sgx_enclave_id_t eid, int client_id, char* public_key_buffer, size_t len)
 {
 	sgx_status_t status;
 	ms_set_public_key_t ms;
+	ms.ms_client_id = client_id;
 	ms.ms_public_key_buffer = public_key_buffer;
 	ms.ms_len = len;
 	status = sgx_ecall(eid, 0, &ocall_table_SealEnclaveTest, &ms);
 	return status;
 }
 
-sgx_status_t set_secret_key(sgx_enclave_id_t eid, char* secret_key_buffer, size_t len)
+sgx_status_t set_secret_key(sgx_enclave_id_t eid, int client_id, char* secret_key_buffer, size_t len)
 {
 	sgx_status_t status;
 	ms_set_secret_key_t ms;
+	ms.ms_client_id = client_id;
 	ms.ms_secret_key_buffer = secret_key_buffer;
 	ms.ms_len = len;
 	status = sgx_ecall(eid, 1, &ocall_table_SealEnclaveTest, &ms);

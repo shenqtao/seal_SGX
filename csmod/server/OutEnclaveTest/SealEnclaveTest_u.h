@@ -23,8 +23,8 @@ int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_untrusted_event_ocall, (const void* wa
 int SGX_UBRIDGE(SGX_CDECL, sgx_thread_setwait_untrusted_events_ocall, (const void* waiter, const void* self));
 int SGX_UBRIDGE(SGX_CDECL, sgx_thread_set_multiple_untrusted_events_ocall, (const void** waiters, size_t total));
 
-sgx_status_t set_public_key(sgx_enclave_id_t eid, char* public_key_buffer, size_t len);
-sgx_status_t set_secret_key(sgx_enclave_id_t eid, char* secret_key_buffer, size_t len);
+sgx_status_t set_public_key(sgx_enclave_id_t eid, int client_id, char* public_key_buffer, size_t len);
+sgx_status_t set_secret_key(sgx_enclave_id_t eid, int client_id, char* secret_key_buffer, size_t len);
 sgx_status_t sigmod_sgx(sgx_enclave_id_t eid, int client_id, char* buffer, size_t len, int trainingSize, int precision);
 sgx_status_t check_Index(sgx_enclave_id_t eid, int* retval);
 sgx_status_t DecreaseNoise_SGX(sgx_enclave_id_t eid, int client_id, char* buf, size_t len);

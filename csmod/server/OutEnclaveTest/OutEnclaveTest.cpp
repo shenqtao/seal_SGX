@@ -13,6 +13,7 @@
 #include <unordered_map>
 #include <assert.h>
 #include "TestData.h"
+#include <map>
 
 using namespace std;
 
@@ -178,10 +179,16 @@ int main()
   return 0;
 }
 
-bool flag_polymod = false, flag_coefmod = false, flag_plainmod = false;
-char polymod[100] = {0}, coefmod[100] = {0}, plainmod[100] = {0}; 
-int polymodlen = 0, coefmodlen = 0, plainmodlen = 0;
-bool configured = false;
+bool establish_connection[IPC_MAX_CONN] = {false};
+map<int, bool> flag_polymod, flag_coefmod, flag_plainmod, configured;
+map<int, int> polymodlen, coefmodlen, plainmodlen;
+map<int, char *> polymod, coefmod, plainmod;
+
+
+//bool flag_polymod = false, flag_coefmod = false, flag_plainmod = false;
+//char polymod[100] = {0}, coefmod[100] = {0}, plainmod[100] = {0}; 
+//int polymodlen = 0, coefmodlen = 0, plainmodlen = 0;
+//bool configured = false;
 // message processing
 /**
  * 通过select查询到fdset之后,循环遍历每个fd是否就绪
@@ -190,19 +197,30 @@ bool configured = false;
  */
 void recv_client_msg(int *clients_fd, fd_set *readfds) {
     char *buf = new char[bufflen];
+    memset(buf, 0, bufflen);
     struct message_head head;
 
     for (size_t i = 0; i < IPC_MAX_CONN; ++i) {
         if (clients_fd[i] == -1) {
             continue;
         } else if (FD_ISSET(clients_fd[i], readfds)) {
-//            int n = read(clients_fd[i], buf, 1024);
+            if(!establish_connection[i])
+            {
+              establish_connection[i] = true;
+              printf("client id: %d\t%d\n", i, clients_fd[i]);
+              flag_polymod[i] = flag_coefmod[i] = flag_plainmod[i] = false; // set the flag to false when a new client is connected.
+              polymodlen[i] = 0, coefmodlen[i] = 0, plainmodlen[i] = 0;
+              polymod[i] = new char[100];
+              coefmod[i] = new char[100];
+              plainmod[i] = new char[100];    // !!!!!!!!!!!  need to free the memory later
+            }
             int n = read(clients_fd[i], &head, sizeof(struct message_head));
             if (n <= 0) {
                 FD_CLR(clients_fd[i], readfds);
                 printf("one socket close\n");
                 close(clients_fd[i]);
                 clients_fd[i] = -1;
+                establish_connection[i] = false;
                 continue;
             }
             printf("command is: %d, buffer length: %d\n", head.cmd, head.data_len);
@@ -214,41 +232,45 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
             read(clients_fd[i], buf, head.data_len);
             if(head.cmd == ENC_PARAMETER_POLYMOD)
             {
-              flag_polymod = true;
-              strcpy(polymod, buf);
-              polymodlen = head.data_len;
-              if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
+              flag_polymod[i] = true;
+              memset(polymod[i], 0, 100);
+              strncpy(polymod[i], buf, head.data_len);
+              polymodlen[i] = head.data_len;
+              printf(">>>>>>>>>>>>>>   recv polymod: %s, %s, length: %d\n", polymod[i], buf, polymodlen[i]);
+              if(!configured[i] && flag_polymod[i] && flag_coefmod[i] && flag_plainmod[i])
               {
-                configured = true;
-                MakeConfigure_SGX(eid, clients_fd[i], polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+                configured[i] = true;
+                MakeConfigure_SGX(eid, clients_fd[i], polymod[i], polymodlen[i], coefmod[i], coefmodlen[i], plainmod[i], plainmodlen[i]);
               }
             }else if(head.cmd == ENC_PARAMETER_COEFMOD)
             {
-              flag_coefmod = true;
-              strcpy(coefmod, buf);
-              coefmodlen = head.data_len;
-              if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
+              flag_coefmod[i] = true;
+              memset(coefmod[i], 0, 100);
+              strncpy(coefmod[i], buf, head.data_len);
+              coefmodlen[i] = head.data_len;
+              if(!configured[i] && flag_polymod[i] && flag_coefmod[i] && flag_plainmod[i])
               {
-                configured = true;
-                MakeConfigure_SGX(eid, clients_fd[i], polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+                configured[i] = true;
+                MakeConfigure_SGX(eid, clients_fd[i], polymod[i], polymodlen[i], coefmod[i], coefmodlen[i], plainmod[i], plainmodlen[i]);
               }
             }else if(head.cmd == ENC_PARAMETER_PLAINMOD)
             {
-              flag_plainmod = true;
-              strcpy(plainmod, buf);
-              plainmodlen = head.data_len;
-              if(!configured && flag_polymod && flag_coefmod && flag_plainmod)
+              flag_plainmod[i] = true;
+              memset(plainmod[i], 0, 100);
+              strncpy(plainmod[i], buf, head.data_len);
+              plainmodlen[i] = head.data_len;
+              if(!configured[i] && flag_polymod[i] && flag_coefmod[i] && flag_plainmod[i])
               {
-                configured = true;
-                MakeConfigure_SGX(eid, clients_fd[i], polymod, polymodlen, coefmod, coefmodlen, plainmod, plainmodlen);
+                configured[i] = true;
+                MakeConfigure_SGX(eid, clients_fd[i], polymod[i], polymodlen[i], coefmod[i], coefmodlen[i], plainmod[i], plainmodlen[i]);
               }
             }
             else if(head.cmd == PUBLIC_KEY)
             {
-              set_public_key(eid, buf, head.data_len);
+              set_public_key(eid, clients_fd[i], buf, head.data_len);
             }else if(head.cmd == PRIVATE_KEY)
             {
-              set_secret_key(eid, buf, head.data_len);
+              set_secret_key(eid, clients_fd[i], buf, head.data_len);
             }else if(head.cmd == ENCRYPT_DATA)
             {
               printf("<<<<<<<<<<<<  Decrease noise in SGX enclave called....<<<<<<last char: %d %d\n", buf[0], buf[100]);
@@ -258,7 +280,6 @@ void recv_client_msg(int *clients_fd, fd_set *readfds) {
               printf(">>> unknown command.\n");
             }
             
-//            sleep(1);
             if(head.cmd == ENCRYPT_DATA)
             {
               write(clients_fd[i], buf, head.data_len);

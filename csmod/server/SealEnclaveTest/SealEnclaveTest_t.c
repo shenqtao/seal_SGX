@@ -18,11 +18,13 @@
 
 
 typedef struct ms_set_public_key_t {
+	int ms_client_id;
 	char* ms_public_key_buffer;
 	size_t ms_len;
 } ms_set_public_key_t;
 
 typedef struct ms_set_secret_key_t {
+	int ms_client_id;
 	char* ms_secret_key_buffer;
 	size_t ms_len;
 } ms_set_secret_key_t;
@@ -115,7 +117,7 @@ static sgx_status_t SGX_CDECL sgx_set_public_key(void* pms)
 
 		memcpy(_in_public_key_buffer, _tmp_public_key_buffer, _len_public_key_buffer);
 	}
-	set_public_key(_in_public_key_buffer, _tmp_len);
+	set_public_key(ms->ms_client_id, _in_public_key_buffer, _tmp_len);
 err:
 	if (_in_public_key_buffer) free(_in_public_key_buffer);
 
@@ -143,7 +145,7 @@ static sgx_status_t SGX_CDECL sgx_set_secret_key(void* pms)
 
 		memcpy(_in_secret_key_buffer, _tmp_secret_key_buffer, _len_secret_key_buffer);
 	}
-	set_secret_key(_in_secret_key_buffer, _tmp_len);
+	set_secret_key(ms->ms_client_id, _in_secret_key_buffer, _tmp_len);
 err:
 	if (_in_secret_key_buffer) free(_in_secret_key_buffer);
 

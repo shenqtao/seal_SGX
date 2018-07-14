@@ -12,7 +12,14 @@ int socket_bind(const char *ip, int port) {
         perror("create socket error");
         exit(1);
     }
-
+    
+    int on=1;  
+    if((setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) < 0)  
+    {  
+        perror("setsockopt failed");  
+        exit(EXIT_FAILURE);  
+    }  
+    
     sockaddr_in addr;
     memset(&addr, 0, sizeof(sockaddr));
     addr.sin_family = AF_INET;
